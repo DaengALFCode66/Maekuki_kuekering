@@ -1,0 +1,736 @@
+/* Import Google Font - Sesuaikan dengan font yang Anda suka */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+:root {
+    /* Warna yang terinspirasi dari contoh (cokelat, emas, krem) */
+    --color-primary: #8B4513; /* Cokelat Tua */
+    --color-secondary: #DAA520; /* Emas */
+    --color-light: #F5F5DC; /* Krem */
+    --color-text-dark: #333;
+    --color-text-light: #fff;
+    --color-accent-green: #25D366; /* Hijau WhatsApp */
+}
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--color-text-dark);
+    line-height: 1.5;
+    background-color: var(--color-light);
+}
+
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 30px;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 1. Navbar */
+.navbar {
+    background-color: var(--color-light);
+    padding: 15px 0;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar .container {
+    display: grid;
+    grid-template-columns: minmax(100px, 250px) 1fr auto;
+    align-items: center;
+}
+
+.navbar .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.navbar .logo img { 
+    height: 50px; 
+    width: auto; 
+    max-width: 120px;
+}
+
+.navbar .logo h1 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+.navbar .nav-links a {
+    margin: 0 12px; 
+    font-weight: 500;
+    color: var(--color-text-dark);
+    transition: color 0.3s;
+}
+
+.navbar .nav-links a:hover,
+.navbar .nav-links a.active {
+    color: var(--color-secondary);
+}
+
+/* 3. Keranjang di Kanan */
+.cart-icon {
+    text-align: right; 
+    font-size: 1.4rem;
+    color: var(--color-primary);
+}
+
+.cart-icon a:hover {
+    color: var(--color-secondary);
+}
+
+/* 2. Hero Section */
+.hero-section {
+    background: url('../assets/Asset/image.png') no-repeat center center/cover;
+    height: 600px; 
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: var(--color-text-light);
+    position: relative;
+}
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.05));
+}
+
+.hero-content {
+    position: relative;
+    z-index: 10;
+    padding-left: 30px; /* Diatur sama dengan padding container */
+    max-width: 550px;
+}
+
+.hero-content h2 {
+    font-size: 3.5rem; /* Dibuat lebih besar */
+    line-height: 1.1;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.hero-content p {
+    font-size: 1.1rem;
+    margin-bottom: 40px; /* Jarak ke tombol */
+}
+
+.btn-lihat-produk {
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+    padding: 10px 22px; /* Dibuat lebih proporsional */
+    border-radius: 50px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+    display: inline-flex; 
+    align-items: center; 
+    gap: 8px;
+    font-size: 1rem;
+}
+
+.btn-lihat-produk:hover {
+    background-color: #ffc107; 
+}
+
+.btn-lihat-produk i {
+    font-size: 0.9em;
+    position: relative;
+    top: 1px;
+}
+
+/* 3. Katalog Produk */
+.katalog-section {
+    padding: 40px 0; /* Dikurangi padding */
+    text-align: center;
+}
+
+.section-title {
+    margin-bottom: 30px; /* Dikurangi jarak */
+}
+
+.section-title .subtitle {
+    color: var(--color-secondary);
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.section-title h2 {
+    font-size: 2.2rem;
+    color: var(--color-primary);
+}
+
+/* --- SLIDER CSS BARU (GRID MULTIBARIS) START --- */
+
+.produk-grid-container {
+    position: relative;
+    padding: 0; /* Hapus padding yang hanya diperlukan untuk tombol panah */
+    /* Hapus overflow-x: hidden; di sini jika Anda ingin melihat semua baris */
+    width: 100%;
+}
+
+.produk-grid {
+    display: grid;
+    /* Tentukan 4 kolom yang sama lebarnya. Ini memaksa 4 item per baris. */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px; 
+    
+    /* Hapus properti scrolling/horizontal flow */
+    /* scroll-behavior: smooth; */
+    /* grid-auto-flow: column; */
+}
+
+
+.produk-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    transition: transform 0.3s;
+}
+
+.produk-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.produk-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.produk-card h3,
+.produk-card .harga {
+    padding: 10px 15px 0;
+}
+
+.produk-card h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+
+
+.produk-card .harga {
+    font-size: 1.3rem;
+    color: #E60023; 
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.card-actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 15px 15px;
+    gap: 10px;
+}
+
+.btn-detail, .btn-order {
+    padding: 8px 15px;
+    border: 1px solid var(--color-primary);
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    flex-grow: 1;
+    transition: all 0.3s;
+}
+
+.btn-detail {
+    background: #fff;
+    color: var(--color-primary);
+}
+
+.btn-detail:hover {
+    background: var(--color-light);
+}
+
+.btn-order {
+    background: var(--color-accent-green);
+    color: white;
+    border-color: var(--color-accent-green);
+}
+
+.btn-order:hover {
+    background: #128C7E;
+    border-color: #128C7E;
+}
+
+/* 4. Parcel Section */
+.parcel-section {
+    background-color: #F8F4E6; 
+    padding: 60px 0;
+    text-align: center;
+    border-top: 1px solid #eee;
+}
+
+.parcel-section h2 {
+    color: var(--color-primary);
+    margin-bottom: 10px;
+}
+
+.parcel-section p {
+    max-width: 700px;
+    margin: 0 auto 20px;
+}
+
+.btn-primary {
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: 600;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #ffc107;
+}
+
+
+/* 5. Footer */
+.main-footer {
+    background-color: var(--color-primary);
+    color: var(--color-light);
+    padding-top: 50px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr 1.5fr; 
+    gap: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.footer-col h3, .footer-col h4 {
+    color: var(--color-secondary);
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+/* Footer About Section */
+.footer-col.about p {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.social-links a {
+    color: var(--color-light);
+    font-size: 1.5rem;
+    margin-right: 15px;
+    transition: color 0.3s;
+}
+
+.social-links a:hover {
+    color: var(--color-secondary);
+}
+
+/* Footer Menu & Kontak */
+.footer-col ul {
+    list-style: none;
+}
+
+.footer-col ul li a {
+    display: block;
+    padding: 5px 0;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+.footer-col ul li a:hover {
+    color: var(--color-secondary);
+}
+
+.footer-col p {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+/* Footer Payment */
+.payment-methods {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.method-tag {
+    background-color: var(--color-light);
+    color: var(--color-primary);
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.method-tag.bca { background-color: #004D99; color: white; }
+.method-tag.mandiri { background-color: #004F9F; color: white; }
+.method-tag.qris { background-color: #008444; color: white; }
+
+
+.jam-operasional {
+    margin-top: 20px !important;
+}
+
+.copyright {
+    text-align: center;
+    padding: 15px 0;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* WhatsApp Floating Button */
+.whatsapp-float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 40px;
+    right: 40px;
+    background-color: var(--color-accent-green);
+    color: #FFF;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 2px 2px 3px #999;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.05);
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1200px) {
+    /* Penyesuaian agar slider tetap 4 kolom sebelum masuk mode tablet */
+    .produk-grid {
+        /* Memastikan 4 kolom per baris */
+        grid-template-columns: repeat(9, minmax(200px, 1fr)); 
+    }
+}
+
+@media (max-width: 992px) {
+    /* Layout Tablet - 3 kolom per baris */
+    .produk-grid {
+        grid-template-columns: repeat(9, minmax(200px, 1fr));
+    }
+    .produk-grid-container {
+        padding: 0 20px;
+    }
+    .nav-arrow {
+        /* Kecilkan panah */
+        padding: 8px 12px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Layout Mobile Besar/Tablet Kecil - 2 kolom per baris */
+    .navbar .nav-links {
+        display: none; 
+    }
+
+    .hero-content h2 {
+        font-size: 2.2rem;
+    }
+    
+    .hero-content {
+        text-align: center;
+        padding-left: 0;
+        max-width: 90%;
+        margin: 0 auto;
+    }
+    
+    .produk-grid {
+        /* Sekarang 9 produk dibagi dalam 2 kolom */
+        grid-template-columns: repeat(9, minmax(150px, 1fr)); 
+        gap: 15px;
+    }
+    
+    /* Mengubah fungsi JS scroll untuk 2 kolom (perlu diubah di HTML/JS) */
+
+    .footer-grid {
+        grid-template-columns: 1fr 1fr; 
+    }
+
+    .footer-col.about {
+        grid-column: span 2; 
+    }
+}
+
+@media (max-width: 576px) {
+    /* Layout Mobile Kecil - 1 kolom per baris */
+    .produk-grid {
+        /* Sekarang 9 produk dibagi dalam 1 kolom */
+        grid-template-columns: repeat(9, 1fr); 
+    }
+    
+    /* Mengubah fungsi JS scroll untuk 1 kolom (perlu diubah di HTML/JS) */
+
+    .footer-grid {
+        grid-template-columns: 1fr; 
+    }
+
+    .footer-col.about {
+        grid-column: span 1;
+    }
+    
+    .whatsapp-float {
+        width: 50px;
+        height: 50px;
+        bottom: 20px;
+        right: 20px;
+        font-size: 25px;
+    }
+}
+
+/* --- Styling untuk Notifikasi Angka Keranjang --- */
+.cart-icon {
+    position: relative;
+}
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background-color: #E60023; /* Merah */
+    color: white;
+    border-radius: 50%;
+    padding: 3px 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: none; /* Sembunyikan secara default, JS akan menampilkannya */
+    justify-content: center;
+    align-items: center;
+    min-width: 18px;
+    height: 18px;
+}
+
+/* --- Styling Modal (Pop-up Keranjang) --- */
+.modal {
+    display: none; /* Disembunyikan secara default, JS akan menampilkannya saat klik */
+    position: fixed; 
+    z-index: 2000; /* Pastikan di atas semua elemen lain */
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.6); /* Backdrop gelap */
+}
+
+.modal-content {
+    background-color: #F8F4E6; /* Warna Krem (sama dengan background section) */
+    margin: 3% auto; /* Jarak dari atas */
+    padding: 30px;
+    border: none;
+    width: 90%;
+    max-width: 550px; /* Ukuran yang ideal untuk keranjang */
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.close-btn {
+    color: #888;
+    float: right;
+    font-size: 32px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: #333;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* --- Styling Card Produk di Keranjang (Sesuai Gambar Anda) --- */
+.cart-product-item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto; /* Gambar (80px), Detail (1fr), Aksi (auto) */
+    gap: 15px;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-product-item:last-child {
+    border-bottom: none;
+}
+
+.cart-product-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.cart-detail h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.cart-detail p {
+    margin: 3px 0;
+    font-size: 0.95rem;
+    color: #333;
+    font-weight: 500;
+}
+
+/* --- Kolom Aksi (Kuantitas dan Hapus) --- */
+.cart-actions-column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+/* Styling Tombol Kuantitas (+ / -) */
+.quantity-control {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.quantity-control button {
+    background: none;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--color-primary);
+    transition: background 0.2s;
+    line-height: 1;
+}
+
+.quantity-control button:hover {
+    background: #f0f0f0;
+}
+
+.quantity-control .qty-display {
+    padding: 5px 10px;
+    font-weight: 600;
+    min-width: 30px;
+    text-align: center;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+}
+
+/* Tombol Hapus (Ikon Tong Sampah Merah) */
+.delete-btn {
+    background: none;
+    border: none;
+    color: #E60023; /* Merah */
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 10px;
+    transition: color 0.2s;
+}
+.delete-btn:hover {
+    color: #a00;
+}
+
+/* Penyesuaian Tombol Checkout */
+#checkout-btn {
+    background-color: var(--color-accent-green);
+    border-color: var(--color-accent-green);
+    transition: background-color 0.3s, opacity 0.3s;
+}
+#checkout-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Media Query untuk Mobile */
+@media (max-width: 576px) {
+    .modal-content {
+        margin: 5% auto;
+        width: 95%;
+        padding: 20px 15px;
+    }
+    .cart-product-item {
+        grid-template-columns: 60px 1fr auto; 
+        gap: 10px;
+    }
+    .cart-product-item img {
+        width: 60px;
+        height: 60px;
+    }
+    #cart-summary {
+        font-size: 1.2rem;
+    }
+}
+
+/* Styling Toast Notification */
+.toast-notification {
+    visibility: hidden; /* <-- HARUS hidden, lalu diubah menjadi 'show' oleh JS */
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: left;
+    border-radius: 8px;
+    padding: 16px;
+    position: fixed;
+    z-index: 3000; 
+    right: 20px;
+    bottom: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.5s, bottom 0.5s;
+    display: flex;
+    align-items: center;
+}
+
+.toast-notification.show {
+    visibility: visible;
+    opacity: 1;
+    bottom: 20px; 
+}
+
+/* ... styling icon dan konten toast lainnya ... */
+
+/* --- Perbaikan untuk Scroll Vertikal pada Konten Keranjang --- */
+#cart-items-wrapper {
+    /* Batasi tinggi wadah agar bagian Total dan Tombol tetap terlihat */
+    max-height: 400px; /* Nilai ini bisa disesuaikan, misalnya 70vh untuk layar besar */
+    overflow-y: auto; /* Aktifkan scroll vertikal ketika konten melebihi max-height */
+    padding-right: 10px; /* Opsional: beri sedikit padding agar scrollbar tidak menempel ke tepi */
+    margin-bottom: 15px; /* Jarak sebelum garis pemisah/total */
+}
+
+/* Penyesuaian agar responsif di layar yang lebih kecil */
+@media (max-width: 768px) {
+    #cart-items-wrapper {
+        max-height: 55vh; /* Gunakan persentase viewport height di mobile/tablet */
+    }
+}
