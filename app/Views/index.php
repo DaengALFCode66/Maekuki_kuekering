@@ -13,14 +13,16 @@
 
     <header class="navbar">
         <div class="container">
-            <div class="logo">
+            <div class="logo logo-left-align">
                 <img src="assets/Asset/maekukilogo.png">
-                <h1>Maekuki Homemade Cookies</h1>
+                <h1>
+                    <span class="brand-name">Maekuki</span><br>
+                    Homemade Cookies
+                </h1>
             </div>
             <nav class="nav-links">
                 <a href="#beranda" class="active">Beranda</a>
                 <a href="#katalog">Katalog</a>
-                <a href="#tentang">Tentang Kami</a>
                 <a href="#kontak">Kontak</a>
             </nav>
 
@@ -65,9 +67,46 @@
 
     <section id="beranda" class="hero-section">
         <div class="hero-content">
-            <h2>Kue Kering Homemade <br>Premium</h2>
+            <h2>Kue Kering Homemade <br>Premium & Halal</h2>
             <p>Resep keluarga yang diwariskan turun-temurun. Tanpa bahan pengawet, dibuat dengan cinta untuk momen spesial Anda.</p>
             <a href="#katalog" class="btn-lihat-produk">Lihat Produk <i class="fas fa-chevron-down"></i></a>
+        </div>
+    </section>
+
+    <section id="keunggulan-kami" class="py-5" style="background-color: #FAF5E8;">
+        <div class="container-keunggulan">
+
+            <h2 class="judul-keunggulan">
+                Keunggulan Kami
+            </h2>
+
+            <div class="keunggulan-wrapper">
+
+                <div class="keunggulan-item">
+                    <i class="fas fa-cookie-bite fa-4x keunggulan-icon" style="color: #6D4C41;"></i>
+                    <h3 class="keunggulan-title">Fresh Setiap Hari</h3>
+                    <p class="keunggulan-desc">
+                        Menyajikan kue kering berkualitas premium, bersajidan premium.
+                    </p>
+                </div>
+
+                <div class="keunggulan-item">
+                    <i class="fas fa-leaf fa-4x keunggulan-icon" style="color: #4CAF50;"></i>
+                    <h3 class="keunggulan-title">Bahan Premium & Halal</h3>
+                    <p class="keunggulan-desc">
+                        Bahan Premium & Halal, bahan pengawet, dibuat premium & Halal.
+                    </p>
+                </div>
+
+                <div class="keunggulan-item">
+                    <i class="fas fa-heart fa-4x keunggulan-icon" style="color: #6D4C41;"></i>
+                    <h3 class="keunggulan-title">Resep Warisan Keluarga</h3>
+                    <p class="keunggulan-desc">
+                        Resep Warisan keluarga, dengam hodium, antuk maum spesial Anda.
+                    </p>
+                </div>
+
+            </div>
         </div>
     </section>
 
@@ -75,7 +114,7 @@
         <div class="section-title">
             <p class="subtitle">KOLEKSI TERBAIK</p>
             <h2>Katalog Kue Kering</h2>
-            <p class="description">Dibuat fresh setiap hari | Kemasan 500gr</p>
+            <p class="description"></p>
         </div>
 
         <div class="produk-grid-wrapper">
@@ -90,7 +129,13 @@
                         foreach ($produk as $item):
                     ?>
 
-                            <div class="produk-card">
+                            <div class="produk-card"
+                                data-id="<?= $item['id'] ?>"
+                                data-nama="<?= esc($item['nama']) ?>"
+                                data-harga="<?= $item['harga'] ?>"
+                                data-gambar="<?= esc($item['url_gambar']) ?>"
+                                data-deskripsi="<?= esc($item['deskripsi']) ?>"
+                                data-status="<?= esc($item['status']) ?>">
                                 <img src="<?= base_url('assets/Asset/' . $item['url_gambar']) ?>"
                                     alt="<?= esc($item['nama']) ?>">
 
@@ -125,13 +170,43 @@
             </div>
 
         </div>
+
+        <?php if (!empty($produk)): ?>
+            <div class="pagination-controls" style="text-align: center; margin-top: 30px;">
+                <div class="custom-pagination pagination-links">
+                    <?= $pager->links() ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
     </section>
 
     <section id="parcel" class="parcel-section">
-        <div class="container">
-            <h2>🎁 Parcel & Hampers Spesial</h2>
-            <p>Jadikan momen spesial lebih berkesan dengan pilihan parcel kue kering premium kami. Cocok untuk hadiah Lebaran, Natal, atau acara istimewa lainnya.</p>
-            <a href="#" class="btn-primary">Lihat Pilihan Parcel</a>
+        <div class="container parcel-container">
+
+            <div class="parcel-image-container">
+
+                <img src="<?= base_url('assets/Asset/parcelremove.png') ?>" alt="Bingkisan Spesial Maekuki">
+            </div>
+
+            <div class="parcel-detail">
+                <h2 class="parcel-title">Bingkisan Spesial untuk Momen Berharga</h2>
+
+                <p class="parcel-description">
+                    Hadirkan kebahagiaan dengan paket parcel eksklusif dari Maekuki. Cocok untuk hantaran Idul Fitri, Natal, atau hadiah untuk kerabat tersayang.
+                </p>
+
+                <ul class="benefit-list">
+                    <li><i class="fas fa-check-circle"></i> Custom isi kue sesuai request</li>
+                    <li><i class="fas fa-check-circle"></i> Free kartu ucapan & pita</li>
+                    <li><i class="fas fa-check-circle"></i> Pengiriman aman ke seluruh kota</li>
+                </ul>
+
+                <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20tertarik%20dengan%20paket%20hampers%20spesial%20Maekuki." class="btn-hubungi-admin">
+                    <i class="fab fa-whatsapp"></i> konsultasi Sekarang
+                </a>
+            </div>
+
         </div>
     </section>
 
@@ -140,7 +215,7 @@
 
             <div class="footer-col about">
                 <h3>Maekuki</h3>
-                <p>Menyajikan kue kering homemade berkualitas premium. Dibuat dengan bahan pilihan, higienis, dan **halal** untuk kepuasan Anda.</p>
+                <p>Menyajikan kue kering homemade berkualitas premium yang didirikan pada tahun 2021. Dibuat dengan bahan pilihan, higienis, dan halal untuk kepuasan Anda.</p>
                 <div class="social-links">
                     <a href="#"><i class="fab fa-instagram"></i></a>
                     <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -153,7 +228,6 @@
                 <ul>
                     <li><a href="#beranda">Beranda</a></li>
                     <li><a href="#katalog">Katalog</a></li>
-                    <li><a href="#tentang">Tentang Kami</a></li>
                     <li><a href="#kontak">Kontak</a></li>
                 </ul>
             </div>
@@ -162,15 +236,12 @@
                 <h4>KONTAK</h4>
                 <p><i class="fas fa-phone"></i> 0812-3456-7890</p>
                 <p><i class="fas fa-envelope"></i> hello@maekuki.com</p>
-                <p><i class="fas fa-map-marker-alt"></i> Jakarta Selatan</p>
             </div>
 
             <div class="footer-col payment">
-                <h4>PEMBAYARAN</h4>
-                <div class="payment-methods">
-                    <span class="method-tag bca">BCA</span>
-                    <span class="method-tag mandiri">Mandiri</span>
-                    <span class="method-tag qris">QRIS</span>
+                <h4>ALAMAT</h4>
+                <div class="Alamat-UMKM">
+                    <p class="address-line"><i class="fas fa-map-marker-alt"></i> Jl. Manunggal 22, Maccini Sombala, Kec. Tamalate, Kota Makassar, Sulawesi Selatan 90224</p>
                 </div>
                 <h4 class="jam-operasional">Jam Operasional:</h4>
                 <p>08.00 - 17.00 WIB</p>
@@ -236,11 +307,15 @@
 
                 <div id="detail-info-container">
                     <h3 id="detail-product-name" style="color: var(--color-primary); font-size: 1.8rem; margin-top: 0;"></h3>
+
+                    <div style="margin-bottom: 10px;">
+                        <p style="font-weight: 600;">Jenis: <span id="detail-jenis">Kue Kering Klasik</span></p>
+                    </div>
+
                     <p id="detail-product-description" style="margin-bottom: 15px;"></p>
 
                     <div style="margin-bottom: 20px;">
                         <p style="font-weight: 600;">Kemasan: <span id="detail-kemasan">500gr</span></p>
-                        <p style="font-weight: 600;">Status: <span id="detail-status" style="color: var(--color-accent-green);">Aktif</span></p>
                     </div>
 
                     <h4 style="color: #E60023; font-size: 1.5rem;">Harga: <span id="detail-product-price"></span></h4>
@@ -253,10 +328,136 @@
         </div>
     </div>
 
+    <div id="user-data-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn user-data-close-btn">&times;</span>
+            <h2>Masukkan Data Pengiriman</h2>
+            <form id="user-data-form">
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="user-name">Nama Lengkap:</label>
+                    <input type="text" id="user-name" required style="width: 100%; padding: 8px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="user-phone">Nomor Telepon (WA):</label>
+                    <input type="tel" id="user-phone" required style="width: 100%; padding: 8px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="user-address">Alamat Pengiriman:</label>
+                    <textarea id="user-address" required style="width: 100%; padding: 8px;"></textarea>
+                </div>
+                <button type="submit" id="final-checkout-btn" class="btn-order" style="width: 100%; padding: 12px; background: #DAA520;">Finalisasi Pesanan</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         // --- Funsi Helper CI4 ---
         function base_url(uri) {
             return "<?= base_url() ?>" + uri;
+        }
+
+
+        // Definisikan fungsi ini di atas initCatalogListeners()
+
+        function handleAddToCart() {
+            const id = this.getAttribute('data-id');
+            const name = this.getAttribute('data-nama');
+            const price = this.getAttribute('data-harga');
+            const image = this.getAttribute('data-gambar');
+            addToCart(id, name, price, image);
+        }
+
+        function handleShowDetail() {
+            const card = this.closest('.produk-card');
+            const productData = getProductDataFromCard(card);
+            showProductDetail(productData);
+        }
+
+        // app/Views/index.php (di bagian <script>)
+
+        // --- FUNGSI BARU: MEMASANG SEMUA LISTENERS KERANJANG ---
+        function initCatalogListeners() {
+            // 1. Tombol Tambah ke Keranjang (Katalog)
+            document.querySelectorAll('.btn-cart').forEach(button => {
+                // Hapus listener lama (jika ada) sebelum menambahkannya lagi
+                // (Meskipun tidak wajib di sini, ini adalah praktik yang baik)
+
+                button.removeEventListener('click', handleAddToCart);
+                button.addEventListener('click', handleAddToCart);
+            });
+
+            // 2. Tombol Detail (Katalog)
+            document.querySelectorAll('.btn-detail').forEach(button => {
+                button.removeEventListener('click', handleShowDetail);
+                button.addEventListener('click', handleShowDetail);
+            });
+
+            // Catatan: Anda perlu membuat fungsi handler yang terpisah (handleAddToCart, handleShowDetail)
+        }
+
+        // --- Fungsi untuk memuat konten katalog melalui AJAX ---
+        async function loadKatalogPage(url) {
+            // 1. Tampilkan indikator loading (opsional)
+            const katalogContainer = document.getElementById('katalogProduk');
+            const paginationControls = document.querySelector('.pagination-controls');
+
+            katalogContainer.style.opacity = '0.5'; // Efek loading
+
+            try {
+                const response = await fetch(url);
+                const data = await response.text(); // Ambil seluruh HTML baru
+
+                // 2. Cari elemen-elemen kunci dari respons HTML baru
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data, 'text/html');
+
+                const newKatalogContent = doc.getElementById('katalogProduk').innerHTML;
+                const newPaginationLinks = doc.querySelector('.pagination-links').innerHTML;
+                const newPaginationInfo = doc.querySelector('.pagination-controls p').innerHTML;
+
+                // 3. Ganti konten di halaman saat ini
+                katalogContainer.innerHTML = newKatalogContent;
+                document.querySelector('.pagination-links').innerHTML = newPaginationLinks;
+
+                initCatalogListeners();
+                initPaginationListeners();
+
+                // 4. Update URL browser tanpa reload (HTML5 History API)
+                history.pushState(null, '', url);
+
+            } catch (error) {
+                console.error('Error memuat katalog via AJAX:', error);
+                alert('Gagal memuat halaman baru.');
+            } finally {
+                katalogContainer.style.opacity = '1'; // Hapus efek loading
+            }
+        }
+
+        // --- FUNGSI BARU: MEMASANG LISTENERS PADA LINK PAGINATION ---
+        function initPaginationListeners() {
+            // 1. Target semua link di dalam container pagination kustom
+            document.querySelectorAll('.custom-pagination a').forEach(link => {
+
+                // Hapus listener lama jika ada (praktik yang baik)
+                link.removeEventListener('click', handlePaginationClick);
+
+                // Tambahkan listener baru
+                link.addEventListener('click', handlePaginationClick);
+            });
+        }
+
+        // --- FUNGSI HANDLER UNTUK KLIK PAGINATION ---
+        function handlePaginationClick(event) {
+            // 1. Mencegah link berjalan ke URL secara normal (mencegah reload halaman)
+            event.preventDefault();
+
+            // 2. Ambil URL (href) dari link yang diklik
+            const newUrl = this.getAttribute('href');
+
+            // 3. Panggil fungsi pemuat katalog dengan URL baru
+            if (newUrl) {
+                loadKatalogPage(newUrl);
+            }
         }
 
         // --- Deklarasi Variabel Global (Diberi nilai nanti di DOMContentLoaded) ---
@@ -284,6 +485,13 @@
         let detailProductDescription = null;
         let detailProductPrice = null;
         let detailAddToCartBtn = null;
+        let detailStok = null; // <-- DEKLARASI DI SINI SUDAH BENAR
+        // ...
+
+        let userDataModal = null;
+        let userDataCloseBtn = null;
+        let userDataForm = null;
+
 
         const CART_STORAGE_KEY = 'maekuki_cart';
 
@@ -295,7 +503,9 @@
             toastTitle.textContent = title;
             toastMessage.textContent = message;
             toastIcon.className = '';
-            toastIcon.classList.add(iconClass);
+
+            const classes = iconClass.split(' ');
+            toastIcon.classList.add(...classes);
 
             toastElement.classList.add('show');
 
@@ -441,7 +651,7 @@
                 id: btnCart.getAttribute('data-id'),
                 nama: name,
                 // Karena deskripsi sudah dihapus dari HTML, kita pakai data statis:
-                deskripsi: `Kue ${name} spesial kami. Dibuat fresh setiap hari dengan bahan premium dan tanpa pengawet.`,
+                deskripsi: card.getAttribute('data-deskripsi'),
                 harga: price,
                 url_gambar: btnCart.getAttribute('data-gambar'),
                 kemasan: "500gr", // Statis
@@ -453,6 +663,10 @@
             // Isi data ke dalam elemen Modal Detail
             detailProductImage.src = base_url('assets/Asset/' + product.url_gambar);
             detailProductName.textContent = product.nama;
+
+            // MENGISI NILAI STOK STATIS (10) dan Kemasan BARU
+            document.getElementById('detail-kemasan').textContent = "500gr / Toples"; // Mengganti hardcode
+
             detailProductDescription.textContent = product.deskripsi;
             detailProductPrice.textContent = formatRupiah(parseFloat(product.harga));
 
@@ -496,6 +710,15 @@
             detailProductDescription = document.getElementById('detail-product-description');
             detailProductPrice = document.getElementById('detail-product-price');
             detailAddToCartBtn = document.getElementById('detail-add-to-cart');
+            // INISIALISASI BARU
+            detailStok = document.getElementById('detail-stok'); // <-- TAMBAHKAN INI
+
+            // --- INISIALISASI BARU ---
+            userDataModal = document.getElementById('user-data-modal');
+            userDataCloseBtn = document.querySelector('.user-data-close-btn');
+            userDataForm = document.getElementById('user-data-form');
+            // ...
+            // ...
             // --- AKHIR INISIALISASI BARU ---
 
 
@@ -503,16 +726,16 @@
             updateCartCount(getCart());
 
             // 1. Event Listener untuk Tombol Detail (di katalog)
+            // 1. Event Listener untuk Tombol Detail (di katalog)
             document.querySelectorAll('.btn-detail').forEach(button => {
                 button.addEventListener('click', function() {
                     const card = this.closest('.produk-card');
 
-                    // Ambil data dari atribut HTML untuk produk ini (Anda perlu menambahkan atribut ini!)
-                    // KARENA DATA TIDAK ADA DI SINI, kita harus mengambilnya dari Model/Database
+                    // Ambil data menggunakan fungsi pembantu
+                    const productData = getProductDataFromCard(card);
 
-                    // --- SOLUSI SIMPLIFIKASI: Ambil data dari database melalui AJAX ---
-                    // Karena kita tidak memiliki AJAX, kita akan menggunakan cara yang lebih sederhana:
-                    // Cukup lewati tombol 'Detail' dan fokus pada tombol 'Tambah' di dalam modal.
+                    // Panggil fungsi untuk menampilkan Modal Detail
+                    showProductDetail(productData);
                 });
             });
 
@@ -551,6 +774,81 @@
                     cartModal.style.display = 'block';
                 });
             }
+
+
+            // Di dalam DOMContentLoaded:
+            userDataForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const cart = getCart();
+                const itemsArray = Object.values(cart); // Ambil array item dari cart object
+
+                const userData = {
+                    name: document.getElementById('user-name').value,
+                    phone: document.getElementById('user-phone').value,
+                    address: document.getElementById('user-address').value
+                };
+
+                const payload = {
+                    user: userData,
+                    items: itemsArray
+                };
+
+                // Tampilkan Loading/Disable tombol
+                this.querySelector('#final-checkout-btn').textContent = 'Memproses...';
+                this.querySelector('#final-checkout-btn').disabled = true;
+
+                try {
+                    const response = await fetch(base_url('api/checkout'), {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // CI4 memerlukan token CSRF jika diaktifkan. Kita abaikan dulu.
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.status === 'success') {
+                        // Sukses: Tampilkan notif, kirim WA, dan hapus keranjang
+                        showToast("Pesanan Berhasil!", `Pesanan ID ${result.id_pesanan} berhasil dicatat.`, 'fas fa-check-circle');
+
+                        // Bersihkan Local Storage
+                        localStorage.removeItem(CART_STORAGE_KEY);
+                        updateCartCount({}); // Update notifikasi angka ke 0
+
+                        // Kirim notifikasi WhatsApp
+                        // Tambahkan di bagian Global Variables (sekitar baris 630 di script Anda)
+                        // Anggap nomor WA Admin adalah: 0812-3456-7890 (sesuai contoh di Footer Anda)
+                        const ADMIN_PHONE = '6281234567890'; // Format internasional tanpa tanda tambah (+)
+                        let waMessage = `Halo Admin, saya telah melakukan pemesanan (ID: ${result.id_pesanan}). Mohon konfirmasi pesanan saya.`;
+                        // GANTI KODE LINK WHATSAPP DENGAN INI:
+                        let fullMessage = `Halo Admin, saya telah melakukan pemesanan (ID: ${result.id_pesanan}). Mohon konfirmasi pesanan saya.
+
+                        Detail Kontak Pelanggan:
+                        Nama: ${userData.name}
+                        Telepon: ${userData.phone}
+                        Alamat: ${userData.address}`;
+
+                        const whatsappUrl = `https://wa.me/${ADMIN_PHONE}?text=${encodeURIComponent(fullMessage)}`;
+                        window.open(whatsappUrl, '_blank');
+
+                    } else {
+                        showToast("Gagal!", `Error: ${result.message}`, 'fas fa-times-circle');
+                    }
+
+                } catch (error) {
+                    showToast("Error Koneksi", "Gagal menghubungi server.", 'fas fa-exclamation-triangle');
+                    console.error('AJAX Error:', error);
+                } finally {
+                    // Reset form dan tombol
+                    userDataModal.style.display = 'none';
+                    this.querySelector('#final-checkout-btn').textContent = 'Finalisasi Pesanan';
+                    this.querySelector('#final-checkout-btn').disabled = false;
+                    this.reset();
+                }
+            });
 
             // 4. Tutup Modal (Tombol X dan Klik di luar)
             if (closeBtn) {
@@ -594,30 +892,27 @@
                 }
             });
 
-            // 6. Tombol Checkout WhatsApp
+            // GANTI event listener checkoutBtn LAMA dengan ini:
             checkoutBtn.addEventListener('click', function() {
                 const cart = getCart();
                 if (Object.keys(cart).length === 0) {
-                    alert("Keranjang kosong!");
+                    showToast("Keranjang Kosong", "Tambahkan produk terlebih dahulu.", 'fas fa-exclamation-triangle');
                     return;
                 }
 
-                let message = "Halo, saya ingin memesan kue kering berikut:\n\n";
-                let totalOrder = 0;
+                // Tampilkan Modal Data User
+                cartModal.style.display = 'none'; // Tutup Modal Keranjang
+                userDataModal.style.display = 'block'; // Buka Modal User
+            });
 
-                for (const id in cart) {
-                    const item = cart[id];
-                    const subtotal = item.price * item.qty;
-                    totalOrder += subtotal;
-
-                    message += `${item.qty}x ${item.name} (${formatRupiah(item.price)} per pcs) = ${formatRupiah(subtotal)}\n`;
+            // TUTUP Modal Data User
+            userDataCloseBtn.addEventListener('click', function() {
+                userDataModal.style.display = 'none';
+            });
+            window.addEventListener('click', function(event) {
+                if (event.target == userDataModal) {
+                    userDataModal.style.display = 'none';
                 }
-
-                message += `\nTotal Belanja: ${formatRupiah(totalOrder)}\n\n`;
-                message += "Mohon konfirmasi pesanan saya. Terima kasih!";
-
-                const whatsappUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(message)}`;
-                window.open(whatsappUrl, '_blank');
             });
         });
     </script>

@@ -1,11 +1,13 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use CodeIgniter\Model;
 
 class ProdukModel extends Model
 {
     // Pastikan nama tabel adalah 'produk' (sesuai yang terlihat di phpMyAdmin Anda)
-    protected $table      = 'produk'; 
+    protected $table      = 'produk';
     protected $primaryKey = 'id';
 
     protected $returnType     = 'array';
@@ -19,6 +21,26 @@ class ProdukModel extends Model
     public function getProdukAktif()
     {
         return $this->where('status', 'aktif')
-                    ->findAll();
+            ->findAll();
+    }
+    // app/Models/ProdukModel.php (Tambahkan method ini di dalam class ProdukModel)
+
+    public function getProdukBySearch($search = null)
+    {
+        $builder = $this->builder(); // Membangun query dari model
+
+        // Jika ada query pencarian, tambahkan kondisi WHERE
+        if ($search) {
+            $builder->like('nama', $search); // Cari di kolom 'nama' produk
+        }
+
+        // Gabungkan dengan data Stok (untuk kolom yang kita tampilkan di tabel)
+        $builder->select('produk.*, stok.jumlah_stok')
+            ->join('stok', 'stok.id_produk = produk.id', 'left'); // LEFT JOIN agar produk tanpa stok tetap tampil
+
+        // Urutkan berdasarkan ID terbaru
+        $builder->orderBy('produk.id', 'ASC');
+
+        return $builder->get()->getResultArray(); 
     }
 }

@@ -5,6 +5,19 @@
 
 <a href="<?= base_url('admin/produk/new') ?>" class="logout-btn" style="background: #25D366; margin-bottom: 20px; display: inline-block;">+ Tambah Produk Baru</a>
 
+<div style="margin-bottom: 20px;">
+    <form action="<?= base_url('admin/produk') ?>" method="get" style="display: flex; gap: 10px;">
+        <input type="text" name="search" placeholder="Cari berdasarkan nama produk..."
+            value="<?= esc($searchQuery ?? '') ?>"
+            style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 300px;">
+
+        <button type="submit" style="background-color: #8B4513; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
+            Cari
+        </button>
+        <a href="<?= base_url('admin/produk') ?>" style="text-decoration: none; padding: 8px 15px; border: 1px solid #ccc; border-radius: 4px; color: #333;">Reset</a>
+    </form>
+</div>
+
 <div class="content-body">
     <?php if (empty($produk)): ?>
         <p>Belum ada produk terdaftar di database.</p>
@@ -42,6 +55,7 @@
             </tbody>
         </table>
     <?php endif; ?>
+    
 </div>
 
 <?= $this->endSection() ?>

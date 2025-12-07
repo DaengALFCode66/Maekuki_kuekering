@@ -26,29 +26,15 @@ class ProdukController extends BaseController
     // LIST SEMUA PRODUK (URL: /admin/produk)
     public function index()
     {
-        // 1. Ambil semua data produk
-        $produkList = $this->produkModel->findAll(); // <-- GUNAKAN NAMA INI
+        // 1. Tangkap input dari URL (GET Request)
+        $searchQuery = $this->request->getGet('search');
 
-        // 2. Ambil semua data stok
-        $stokList = $this->stokModel->findAll();
-        $stokMap = [];
-        foreach ($stokList as $stok) {
-            // Gunakan id_produk sebagai kunci (key)
-            $stokMap[$stok['id_produk']] = $stok['jumlah_stok'];
-        }
+        // 2. Ambil data produk, menerapkan filter pencarian
+        // Catatan: getProdukBySearch sudah join dengan tabel stok
+        $data['produk'] = $this->produkModel->getProdukBySearch($searchQuery);
 
-        // 3. Gabungkan data
-        $dataProdukGabungan = [];
-        foreach ($produkList as $produk) { // <-- SEKARANG INI BENAR
-            $id = $produk['id'];
-
-            // Tambahkan jumlah_stok ke array produk
-            $produk['jumlah_stok'] = $stokMap[$id] ?? 0; // Default 0 jika stok tidak ditemukan
-
-            $dataProdukGabungan[] = $produk;
-        }
-
-        $data['produk'] = $dataProdukGabungan;
+        // 3. Kirim kembali nilai yang dicari ke View untuk mengisi form
+        $data['searchQuery'] = $searchQuery;
 
         return view('admin/produk/index', $data);
     }
@@ -80,6 +66,8 @@ class ProdukController extends BaseController
         return redirect()->to('/admin/produk')->with('success', 'Produk berhasil ditambahkan.');
     }
 
+
+
     // EDIT PRODUK (URL: /admin/produk/edit/ID)
     public function edit($id = null)
     {
@@ -104,24 +92,53 @@ class ProdukController extends BaseController
     }
 
     // UPDATE PRODUK
+    // app/Controllers/Admin/ProdukController.php
+
     public function update($id = null)
     {
-        // Cek apakah data form diterima dengan benar
+        $fileGambar = $this->request->getFile('gambar');
+        $gambarLama = $this->request->getPost('gambar_lama');
+
         $data_update = [
-            'nama' => $this->request->getPost('nama'),
-            'deskripsi' => $this->request->getPost('deskripsi'),
-            'harga' => $this->request->getPost('harga'), // FOKUS DI SINI
-            'status' => $this->request->getPost('status'),
-            'url_gambar' => $this->request->getPost('url_gambar'),
+            'nama'       => $this->request->getPost('nama'),
+            'deskripsi'  => $this->request->getPost('deskripsi'),
+            'harga'      => $this->request->getPost('harga'),
+            'status'     => $this->request->getPost('status'),
+            // url_gambar akan ditentukan di bawah
         ];
 
-        // DEBUGGING SEMENTARA: Hapus baris di bawah ini setelah tes
-        // die(print_r($data_update, true)); 
+        // --- LOGIKA FILE UPLOAD ---
+        if ($fileGambar && $fileGambar->isValid() && !$fileGambar->hasMoved()) {
 
-        // Panggil Model untuk update
+            // 1. Validasi File (CI4 punya validasi bawaan yang kuat, tapi kita lewati untuk simplifikasi)
+
+            // 2. Tentukan nama file baru yang unik
+            $namaGambarBaru = $fileGambar->getRandomName();
+
+            // 3. Pindahkan file ke direktori target
+            // Direktori Target: ROOT_PROYEK/assets/Asset/
+            $fileGambar->move(ROOTPATH . 'public/assets/Asset', $namaGambarBaru);
+
+            // 4. Hapus gambar lama jika ada
+            if ($gambarLama && file_exists(ROOTPATH . 'public/assets/Asset/' . $gambarLama)) {
+                unlink(ROOTPATH . 'public/assets/Asset/' . $gambarLama);
+            }
+
+            // Simpan nama file baru ke database
+            $data_update['url_gambar'] = $namaGambarBaru;
+        } else {
+            // Jika tidak ada file baru diupload, gunakan nama file yang lama
+            $data_update['url_gambar'] = $gambarLama;
+        }
+
+        // --- Lanjutkan Proses Update ---
+
+        // Pastikan Model mengizinkan kolom 'url_gambar'
         $this->produkModel->update($id, $data_update);
 
-        // --- 2. PROSES UPDATE TABEL STOK ---
+        // Update Stok
+        // ... (Logika update stok Anda tetap dipertahankan) ...
+
         $newStok = $this->request->getPost('jumlah_stok');
         $currentDateTime = date('Y-m-d H:i:s');
 
@@ -129,13 +146,11 @@ class ProdukController extends BaseController
         $stokEntry = $this->stokModel->where('id_produk', $id)->first();
 
         if ($stokEntry) {
-            // Jika sudah ada, lakukan UPDATE
             $this->stokModel->update($stokEntry['id'], [
                 'jumlah_stok' => $newStok,
                 'tanggal_update' => $currentDateTime
             ]);
         } else {
-            // Jika belum ada, lakukan INSERT (entri baru)
             $this->stokModel->insert([
                 'id_produk' => $id,
                 'jumlah_stok' => $newStok,
@@ -143,13 +158,6 @@ class ProdukController extends BaseController
             ]);
         }
 
-        return redirect()->to('/admin/produk')->with('success', 'Produk berhasil diupdate.');
-    }
-
-    // HAPUS PRODUK
-    public function delete($id = null)
-    {
-        $this->produkModel->delete($id);
-        return redirect()->to('/admin/produk')->with('success', 'Produk berhasil dihapus.');
+        return redirect()->to('/admin/produk')->with('success', 'Produk berhasil diupdate dan foto telah diganti.');
     }
 }

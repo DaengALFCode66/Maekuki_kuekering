@@ -1,5 +1,6 @@
 /* Import Google Font - Sesuaikan dengan font yang Anda suka */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
 
 :root {
     /* Warna yang terinspirasi dari contoh (cokelat, emas, krem) */
@@ -40,7 +41,7 @@ a {
 /* 1. Navbar */
 .navbar {
     background-color: var(--color-light);
-    padding: 15px 0;
+    padding: 7px 0;
     border-bottom: 1px solid #ddd;
     position: sticky;
     top: 0;
@@ -49,14 +50,33 @@ a {
 
 .navbar .container {
     display: grid;
-    grid-template-columns: minmax(100px, 250px) 1fr auto;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
+    padding: 0;
 }
 
 .navbar .logo {
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-left: -30px
+    
+}
+
+.navbar .logo .brand-name {
+    /* Style untuk 'Maekuki' */
+    
+    /* 1. Font Kartun */
+    font-family: 'Architects Daughter', cursive; 
+    
+    /* 2. Ukuran Lebih Besar */
+    font-size: 1.5rem; /* Ukuran yang lebih besar dari baris kedua */
+    
+    /* 3. Warna Kuning Keemasan */
+    color: var(--color-secondary); /* Emas/Kuning Keemasan */
+    font-weight: 700;
+    margin-bottom: 2px;
+    display: block; /* Penting: agar mengambil seluruh lebar dan pemisah baris bekerja */
 }
 
 .navbar .logo img { 
@@ -66,9 +86,19 @@ a {
 }
 
 .navbar .logo h1 {
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 0.8;
     color: var(--color-primary);
+    padding-top: 2px;
+    margin-left: 10px;
+}
+
+.navbar .nav-links {
+    /* Ini adalah kolom tengah (1fr) di Grid. Mengatur perataan teks ke tengah. */
+    text-align: center; 
+    padding: 0 30px;
+    margin: 0;
 }
 
 .navbar .nav-links a {
@@ -88,6 +118,7 @@ a {
     text-align: right; 
     font-size: 1.4rem;
     color: var(--color-primary);
+    padding: 0 30px;
 }
 
 .cart-icon a:hover {
@@ -97,7 +128,8 @@ a {
 /* 2. Hero Section */
 .hero-section {
     background: url('../assets/Asset/image.png') no-repeat center center/cover;
-    height: 600px; 
+    background-size: 110%;
+    height: 510px; 
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -111,7 +143,7 @@ a {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.05));
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.05));
 }
 
 .hero-content {
@@ -275,36 +307,164 @@ a {
     border-color: #128C7E;
 }
 
-/* 4. Parcel Section */
+/* --- 4. Parcel Section (Mode Full-Width Background Gelap) --- */
 .parcel-section {
-    background-color: #F8F4E6; 
-    padding: 60px 0;
-    text-align: center;
-    border-top: 1px solid #eee;
+    /* Background Gambar Penuh (sama dengan Hero) */
+    background: url('../assets/Asset/parcelaseli.jpg') no-repeat center center/cover;
+    background-size: 120%; 
+    padding: 70px 0;
+    position: relative;
+    z-index: 1; /* Penting untuk overlay */
 }
 
-.parcel-section h2 {
-    color: var(--color-primary);
-    margin-bottom: 10px;
+/* 1. Tambahkan OVERLAY GELAP (agar gambar tidak terlalu mencolok dan teks terbaca) */
+.parcel-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Overlay Coklat Gelap Semi-Transparan */
+    background-color: rgba(0, 0, 0, 0.6); 
+    z-index: 2; /* Di atas gambar, di bawah konten */
 }
 
-.parcel-section p {
-    max-width: 700px;
-    margin: 0 auto 20px;
+/* 2. Style Container Konten (Memastikan konten di tengah dan di atas overlay) */
+.parcel-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 100px;
+    
+    position: relative; /* Penting agar z-index bekerja */
+    z-index: 3; /* Konten harus di atas overlay */
+    
+    /* Hapus Padding / Background Putih yang Lama */
 }
 
-.btn-primary {
-    background-color: var(--color-secondary);
-    color: var(--color-primary);
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-weight: 600;
-    display: inline-block;
-    transition: background-color 0.3s;
+/* Kiri: Gambar */
+.parcel-image-container {
+    flex-shrink: 0;
+    width: 50%; 
+    max-width: 450px;
+    position: relative;
+    /* Tambahkan border putih tipis pada gambar jika diperlukan untuk kontras */
 }
 
-.btn-primary:hover {
-    background-color: #ffc107;
+/* Kanan: Detail (Ubah Warna Teks menjadi Putih/Terang) */
+.parcel-detail {
+    width: 65%;
+    text-align: left;
+    color: white; /* Teks default menjadi putih */
+}
+
+.parcel-title {
+    font-size: 2rem;
+    color: var(--color-secondary); /* Judul Emas (agar kontras) */
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.parcel-description {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9); /* Putih sedikit transparan */
+    margin-bottom: 25px;
+}
+
+.benefit-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 30px;
+}
+
+.benefit-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: white; /* Pastikan list item berwarna putih */
+}
+
+.benefit-list li i {
+    color: var(--color-accent-green); /* Tanda centang Emas */
+}
+
+/* --- Style Tombol Konsultasi Sekarang --- */
+
+.btn-hubungi-admin {
+    /* Desain Dasar */
+    background-color: var(--color-secondary); /* Emas: Warna Utama */
+    color: var(--color-primary);             /* Teks Coklat Tua */
+    
+    padding: 14px 30px; /* Ukuran Lebih Besar */
+    border-radius: 10px; 
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    
+    /* Efek Menarik */
+    box-shadow: 0 6px 0 var(--color-primary-dark); /* Shadow 3D */
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-out; /* Transisi halus untuk efek hover */
+}
+
+/* Efek HOVER: Tombol Tertekan (Kesan 3D) */
+.btn-hubungi-admin:hover {
+    background-color: #ffc107; /* Emas sedikit lebih terang */
+    box-shadow: 0 3px 0 var(--color-primary-dark); /* Shadow berkurang */
+    transform: translateY(3px); /* Tombol bergerak ke bawah */
+}
+
+/* Efek Klik (ACTIVE) */
+.btn-hubungi-admin:active {
+    box-shadow: none;
+    transform: translateY(6px);
+}
+
+
+/* Media Query untuk Responsif (Mobile/Tablet) */
+@media (max-width: 992px) {
+    /* Mode HP: Pastikan Konten Penuh dan Rata Tengah */
+    
+    .parcel-section {
+        /* Zoom Background sedikit untuk mode mobile agar tidak terlalu kosong */
+        background-size: cover; 
+        background-position: center; /* Fokus di tengah gambar */
+        background-attachment: scroll;
+    }
+    
+    .parcel-container {
+        flex-direction: column; /* Ubah menjadi satu kolom vertikal */
+        padding: 20px 0;
+        gap: 30px;
+    }
+    .parcel-image-container,
+    .parcel-detail {
+        width: 100%; /* Lebar penuh */
+        max-width: 500px;
+    }
+    .parcel-detail {
+        text-align: center; /* Rata tengah semua teks */
+        margin-top: 20px;
+    }
+    .benefit-list {
+        /* Rata tengah list item agar tidak menempel ke kiri */
+        text-align: center;
+        width: fit-content;
+        margin: 20px auto; 
+    }
+    .benefit-list li {
+        justify-content: flex-start; /* List item rata kiri di wadah tengah */
+    }
 }
 
 
@@ -370,11 +530,30 @@ a {
     margin-bottom: 8px;
 }
 
-/* Footer Payment */
-.payment-methods {
+/* Footer Alamat (Alamat-UMKM) */
+.Alamat-UMKM {
+    /* Gunakan flex untuk memastikan item di dalamnya (yaitu p) diatur */
     display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
+    flex-direction: column; /* Tumpuk item jika ada lebih dari satu, tapi di sini hanya ada 1 p */
+    margin-bottom: 20px; /* Tambah jarak di bawah blok alamat */
+}
+
+/* Gaya untuk baris alamat (yang berisi ikon dan teks) */
+.Alamat-UMKM .address-line {
+    /* KUNCI: Membuat ikon dan teks berjejer */
+    display: flex;
+    align-items: flex-start; /* Sejajarkan ikon dengan awal teks */
+    gap: 10px; /* Jarak antara ikon dan teks */
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 0; /* Hapus margin default pada p */
+}
+
+/* Gaya untuk Ikon Lokasi */
+.Alamat-UMKM .address-line i {
+    /* Pastikan ikon tidak terpengaruh oleh line-height */
+    font-size: 1rem; 
+    flex-shrink: 0; /* Penting: mencegah ikon menyusut saat di mobile */
 }
 
 .method-tag {
@@ -516,8 +695,8 @@ a {
 }
 .cart-count {
     position: absolute;
-    top: -8px;
-    right: -10px;
+    top: -6px;
+    right: 15px;
     background-color: #E60023; /* Merah */
     color: white;
     border-radius: 50%;
@@ -701,7 +880,7 @@ a {
     border-radius: 8px;
     padding: 16px;
     position: fixed;
-    z-index: 3000; 
+    z-index: 9999; 
     right: 20px;
     bottom: 0;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -717,6 +896,11 @@ a {
     bottom: 20px; 
 }
 
+#toast-icon {
+    font-size: 1.5rem;
+    margin-right: 15px;
+    color: #25D366; /* Hijau WhatsApp */
+}
 /* ... styling icon dan konten toast lainnya ... */
 
 /* --- Perbaikan untuk Scroll Vertikal pada Konten Keranjang --- */
@@ -732,5 +916,317 @@ a {
 @media (max-width: 768px) {
     #cart-items-wrapper {
         max-height: 55vh; /* Gunakan persentase viewport height di mobile/tablet */
+    }
+}
+
+/* Container Utama */
+#keunggulan-kami {
+    /* Background warna krem sesuai gambar */
+    background-color: #FAF5E8; 
+    padding: 50px 0; 
+}
+
+/* Container untuk menjaga lebar konten */
+.container-keunggulan {
+    max-width: 1100px;
+    margin: 0 auto; 
+    padding: 0 15px;
+}
+
+/* Judul Utama */
+.judul-keunggulan {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #4a4a4a;
+    margin-bottom: 3rem;
+}
+
+/* KUNCI: Membuat 3 item berjejer ke samping (HORIZONTAL) */
+.keunggulan-wrapper {
+    display: flex;
+    justify-content: space-around;
+    gap: 30px; 
+}
+
+/* Gaya Setiap Item Keunggulan */
+.keunggulan-item {
+    text-align: center;
+    flex-basis: 30%; 
+}
+
+/* Judul (Fresh Setiap Hari, dll.) */
+.keunggulan-title {
+    font-size: 1.1rem;
+    font-weight: 700; /* Dibuat tebal sesuai gambar */
+    color: #4a4a4a;
+    margin-top: 15px; /* Jarak antara ikon dan judul */
+    margin-bottom: 5px;
+}
+
+/* Deskripsi (Teks kecil) */
+.keunggulan-desc {
+    font-size: 0.85rem;
+    color: #6c757d; 
+    line-height: 1.4;
+}
+
+/* Penyesuaian Warna Icon sesuai gambar */
+.leaf-icon {
+    color: #4CAF50 !important; /* Hijau */
+}
+
+.oven-icon, .heart-icon {
+    color: #6D4C41 !important; /* Coklat Gelap */
+}
+
+/* Media Query untuk Mobile */
+@media (max-width: 768px) {
+    .keunggulan-wrapper {
+        flex-direction: column; /* Tumpuk vertikal di ponsel */
+        gap: 40px;
+    }
+}
+
+/* ================================== */
+/* 3. PAGINATION KUSTOM (FINAL VERSI CI4) */
+/* Pastikan ini adalah satu-satunya blok CSS pagination kustom Anda */
+/* ================================== */
+
+/* 1. Container Utama (Memastikan rata tengah) */
+.custom-pagination {
+    margin-top: 40px !important; 
+    padding-bottom: 30px !important;
+}
+
+/* 2. Style Wrapper List (Kunci: Horizontal dan Jarak) */
+.custom-pagination ul {
+    list-style: none !important;
+    padding: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    gap: 12px !important; /* Jarak antara angka */
+    margin: 0 !important;
+}
+
+/* 3. Style Link Angka (Menargetkan <a> di dalam <li> CI4) */
+.custom-pagination li a { 
+    /* Menggunakan selector li a untuk specificity yang lebih tinggi */
+    
+    /* Bentuk dan Ukuran */
+    display: flex !important; 
+    align-items: center !important;
+    justify-content: center !important;
+    width: 45px !important;
+    height: 45px !important;
+    
+    /* Font dan Warna */
+    font-size: 1.4rem !important; /* Angka yang lebih besar */
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    color: #926C5F !important; /* Warna teks coklat */
+    
+    /* Desain */
+    border: 2px solid #D6BC91 !important; /* Border coklat muda */
+    border-radius: 8px !important; 
+    background-color: transparent !important;
+    transition: all 0.3s ease !important; /* Efek transisi halus */
+}
+
+/* 4. Efek HOVER */
+.custom-pagination li a:hover {
+    background-color: #F8E7C5 !important; /* Warna background saat disorot */
+    color: #6D4C41 !important; /* Warna teks menjadi coklat gelap */
+    border-color: #6D4C41 !important; /* Border menjadi coklat gelap */
+    transform: translateY(-2px); /* Efek sedikit naik */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+/* 5. Style Halaman AKTIF (yang sedang dibuka) */
+/* CI4/Bootstrap sering menempatkan class 'active' pada <li> */
+.custom-pagination li.active a,
+.custom-pagination li .active a { /* Tambahan untuk menangani kemungkinan perbedaan output */
+    background-color: #6D4C41 !important; /* Background Coklat Gelap */
+    color: white !important; /* Teks putih */
+    border-color: #6D4C41 !important;
+    transform: none; 
+    pointer-events: none; /* Tidak bisa diklik lagi */
+}
+
+/* ================================== */
+/* STYLING SCROLL BAR KUSTOM (WEBKIT) */
+/* ================================== */
+
+/* 1. Atur lebar scrollbar (untuk vertikal) */
+::-webkit-scrollbar {
+    width: 8px; /* Lebar untuk scrollbar vertikal */
+    height: 8px; /* Tinggi untuk scrollbar horizontal (jika ada) */
+}
+
+/* 2. Style TRACK (Latar belakang scrollbar) */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Warna track sangat terang */
+    border-radius: 10px;
+}
+
+/* 3. Style THUMB (Pegangan/Scroll bar yang bisa digerakkan) */
+::-webkit-scrollbar-thumb {
+    /* Menggunakan warna coklat gelap sesuai tema Anda */
+    background: #6D4C41; 
+    border-radius: 10px;
+}
+
+/* 4. Efek HOVER pada THUMB */
+::-webkit-scrollbar-thumb:hover {
+    /* Coklat yang sedikit lebih terang saat disorot */
+    background: #8B4513; 
+}
+
+/* 5. Khusus untuk Modal Keranjang (jika scroll bar masih putih) */
+#cart-items-wrapper::-webkit-scrollbar-thumb {
+    background: #6D4C41; 
+}
+
+/* ================================== */
+/* STYLING MODAL INPUT DATA PENGIRIMAN */
+/* ================================== */
+
+/* 1. Style Wrapper Form Group */
+#user-data-form .form-group {
+    margin-bottom: 20px;
+}
+
+/* 2. Style Label Teks (Nama Lengkap, Nomor Telepon, dll.) */
+#user-data-form label {
+    display: block; /* Agar label berada di baris sendiri di atas input */
+    font-weight: 600;
+    color: var(--color-primary); /* Coklat Tua */
+    margin-bottom: 5px;
+    font-size: 1rem;
+}
+
+/* 3. Style Input Fields (Text, Tel, Textarea) */
+#user-data-form input[type="text"],
+#user-data-form input[type="tel"],
+#user-data-form textarea {
+    /* Desain Kotak Input */
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #D6BC91; /* Border Coklat Muda */
+    border-radius: 6px;
+    font-size: 1rem;
+    color: var(--color-text-dark);
+    background-color: #ffffff; /* Latar belakang putih bersih */
+    transition: all 0.3s ease;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Sedikit bayangan dalam */
+    box-sizing: border-box; /* Pastikan padding tidak menambah lebar */
+}
+
+/* Style Khusus untuk Textarea (Alamat) */
+#user-data-form textarea {
+    resize: vertical; /* Hanya izinkan resize vertikal */
+    min-height: 100px;
+}
+
+/* 4. Efek Fokus (Saat Input Diklik) */
+#user-data-form input:focus,
+#user-data-form textarea:focus {
+    border-color: var(--color-secondary); /* Border Emas saat fokus */
+    box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.2); /* Bayangan Emas Muda */
+    outline: none; /* Hapus outline default browser */
+}
+
+/* 5. Style Tombol Finalisasi Pesanan */
+#final-checkout-btn {
+    /* Menggantikan style inline dengan style CSS */
+    background: var(--color-secondary) !important; /* Emas */
+    color: var(--color-primary) !important; /* Teks Coklat Tua */
+    border: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 14px 25px;
+    border-radius: 8px;
+    transition: background 0.3s;
+}
+
+#final-checkout-btn:hover {
+    background: #ffc107 !important; /* Emas sedikit lebih terang */
+}
+
+/* ================================== */
+/* PERBAIKAN JUDUL MODAL DATA PENGIRIMAN */
+/* ================================== */
+
+/* Targetkan Judul di dalam Modal Input Data */
+#user-data-modal h2 {
+    /* 1. Rata Tengah Judul */
+    text-align: center; 
+    
+    /* 2. Tambah Jarak ke Bawah (ke input Nama Lengkap) */
+    margin-bottom: 30px; /* Nilai ini dinaikkan, sebelumnya defaultnya mungkin kecil */
+    
+    /* Tambahan styling agar terlihat tebal dan jelas */
+    font-weight: 700;
+    color: #4a4a4a; 
+}
+
+/* Jarak antar form group tetap diatur di sini (sebelumnya sudah 20px) */
+#user-data-form .form-group {
+    margin-bottom: 20px;
+}
+
+/* --- Tambahan: Menu Toggle / Hamburger --- */
+.menu-toggle {
+    display: none; /* Sembunyikan di desktop */
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+/* 1. Navbar di Mobile */
+@media (max-width: 768px) {
+    
+    /* Tampilkan Tombol Hamburger */
+    .menu-toggle {
+        display: block; 
+    }
+    
+    /* Tata letak Grid Navbar Mobile (Logo - Hamburger - Keranjang) */
+    .navbar .container {
+        /* Ubah tata letak: Logo (1fr), Hamburger (auto), Cart (auto) */
+        grid-template-columns: 1fr auto auto; 
+        gap: 10px; 
+    }
+
+    .navbar .logo {
+        margin-left: 0; /* Hapus margin negatif */
+    }
+    
+    /* Sembunyikan Nav-links di Mobile */
+    .navbar .nav-links {
+        display: none; 
+        /* Akan ditampilkan JS saat toggle */
+        position: absolute;
+        top: 60px; /* Di bawah navbar */
+        left: 0;
+        width: 100%;
+        background-color: var(--color-light); /* Background menu */
+        box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
+        padding: 10px 0;
+        flex-direction: column;
+        text-align: left;
+    }
+    .navbar .nav-links.show {
+        display: flex; /* Tampilkan saat class 'show' ditambahkan JS */
+    }
+    .navbar .nav-links a {
+        padding: 10px 30px;
+        margin: 0;
+        border-bottom: 1px solid #eee;
     }
 }

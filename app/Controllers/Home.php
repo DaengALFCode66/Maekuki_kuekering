@@ -1,24 +1,26 @@
-<?php
+<?php namespace App\Controllers;
 
-namespace App\Controllers;
-
-// WAJIB: Import Model Produk agar bisa digunakan
-use App\Models\ProdukModel;
+use App\Models\ProdukModel; // WAJIB: Import Model Produk agar bisa digunakan
 
 class Home extends BaseController
 {
     public function index()
     {
-        // 1. Inisialisasi Model
-        // CI4 akan otomatis mencari file app/Models/ProdukModel.php
         $produkModel = new ProdukModel();
+        
+        // 1. Definisikan jumlah item per halaman (4x2 = 8 item)
+        $perPage = 8; 
 
-        // 2. Ambil data produk yang berstatus 'aktif' dari database
-        // Data yang diambil akan berupa array of objects/arrays
-        $data['produk'] = $produkModel->getProdukAktif();
+        // 2. Ambil data produk yang aktif menggunakan Query Builder
+        $produkBuilder = $produkModel->where('status', 'aktif');
+        
+        // 3. Gunakan paginate() untuk membatasi hasil
+        $data['produk'] = $produkBuilder->paginate($perPage);
 
-        // 3. Kirim data ($data) ke View
-        // View 'index' (app/Views/index.php) kini memiliki variabel $produk
+        // 4. Kirim objek Pager ke View (penting untuk tautan halaman "1, 2, ...")
+        $data['pager'] = $produkModel->pager; 
+        
+        // 5. Kirim data ke View 'index'
         return view('index', $data);
     }
 }

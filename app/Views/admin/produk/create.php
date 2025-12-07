@@ -4,7 +4,7 @@
     <h1>Tambah Produk Baru</h1>
     <a href="<?= base_url('admin/produk') ?>" style="margin-bottom: 15px; display: inline-block;">&larr; Kembali ke Daftar Produk</a>
 
-    <form action="<?= base_url('admin/produk/create') ?>" method="post">
+    <form action="<?= base_url('admin/produk') ?>" method="post"> 
         <?= csrf_field() ?>
 
         <div style="margin-bottom: 15px;">
