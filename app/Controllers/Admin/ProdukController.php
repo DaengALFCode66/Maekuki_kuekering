@@ -160,4 +160,17 @@ class ProdukController extends BaseController
 
         return redirect()->to('/admin/produk')->with('success', 'Produk berhasil diupdate dan foto telah diganti.');
     }
-}
+    public function delete($id = null)
+    {
+        try {
+            // Hapus pesanan. Karena ada ON DELETE CASCADE pada fk_detail_pesanan_pesanan,
+            // semua detail pesanan akan otomatis terhapus.
+            $this->produkModel->delete($id);
+
+            return redirect()->to('/admin/produk')->with('success', 'produk#' . $id . ' berhasil dihapus.');
+        } catch (\Exception $e) {
+            // FK constraint mungkin gagal (misal jika ada entri di tabel lain yang merujuk)
+            return redirect()->back()->with('error', 'Gagal menghapus pesanan. Error: ' . $e->getMessage());
+        }
+    }
+}    
