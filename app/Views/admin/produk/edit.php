@@ -25,15 +25,6 @@
             <label for="harga" style="display: block; font-weight: bold;">Harga (Rp):</label>
             <input type="number" id="harga" name="harga" value="<?= esc($produk['harga']) ?>" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
         </div>
-
-        <div style="margin-bottom: 15px;">
-            <label for="status" style="display: block; font-weight: bold;">Status:</label>
-            <select id="status" name="status" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-                <option value="aktif" <?= ($produk['status'] === 'aktif') ? 'selected' : '' ?>>Aktif</option>
-                <option value="non-aktif" <?= ($produk['status'] === 'non-aktif') ? 'selected' : '' ?>>Non-Aktif</option>
-            </select>
-        </div>
-
         <div style="margin-bottom: 20px; border: 1px dashed #ccc; padding: 15px; border-radius: 4px;">
             <label for="gambar" style="display: block; font-weight: bold; margin-bottom: 10px;">Ganti Foto Produk:</label>
 
