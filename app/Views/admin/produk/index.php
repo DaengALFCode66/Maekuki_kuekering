@@ -1,6 +1,59 @@
 <?= $this->extend('admin/layout') ?>
 
 <?= $this->section('content') ?>
+
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- STYLE UNTUK TABEL (langsung di halaman) -->
+<style>
+    .table-custom {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        border-radius: 6px;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        background: #fff;
+    }
+
+    .table-custom thead {
+        background: #d56c0a;
+        color: white;
+    }
+
+    .table-custom th {
+        padding: 12px;
+        text-align: left;
+        font-weight: bold;
+        border-bottom: 2px solid #c25f08;
+    }
+
+    .table-custom td {
+        padding: 12px;
+        border-bottom: 1px solid #eeeeeeff;
+    }
+
+    .table-custom tr:hover {
+        background: #c59970ff;
+    }
+
+    .action-edit {
+        color: #1e88e5;
+        margin-right: 10px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .action-hapus {
+        color: #d32f2f;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+    }
+</style>
+
 <h1>Manajemen Produk</h1>
 
 <a href="<?= base_url('admin/produk/new') ?>" class="logout-btn" style="background: #25D366; margin-bottom: 20px; display: inline-block;">+ Tambah Produk Baru</a>
@@ -22,40 +75,64 @@
     <?php if (empty($produk)): ?>
         <p>Belum ada produk terdaftar di database.</p>
     <?php else: ?>
-        <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
-            <thead>
-                <tr style="background-color: #f2f2f2;">
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">ID</th>
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Nama</th>
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Harga</th>
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Stok</th>
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Status</th>
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($produk as $item): ?>
-                    <tr>
-                        <td style="padding: 10px; border: 1px solid #ddd;"><?= esc($item['id']) ?></td>
-                        <td style="padding: 10px; border: 1px solid #ddd;"><?= esc($item['nama']) ?></td>
-                        <td style="padding: 10px; border: 1px solid #ddd;">Rp <?= number_format($item['harga'], 0, ',', '.') ?></td>
-                        <td style="padding: 10px; border: 1px solid #ddd;"><?= esc($item['jumlah_stok']) ?></td>
-                        <td style="padding: 10px; border: 1px solid #ddd;"><?= esc($item['status']) ?></td>
-                        <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">
-                            <a href="<?= base_url('admin/produk/' . $item['id'] . '/edit') ?>" style="color: blue; margin-right: 10px;">Edit</a>
 
-                            <form action="<?= base_url('admin/produk/' . $item['id']) ?>" method="post" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus produk <?= esc($item['nama']) ?>?');">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <?= csrf_field() ?>
-                                <button type="submit" style="color: red; background: none; border: none; cursor: pointer;">Hapus</button>
-                            </form>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <table class="table-custom">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nama</th>
+            <th>Harga</th>
+            <th>Stok</th>
+            <th>Status</th>
+            <th style="text-align: center;">Aksi</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <?php foreach ($produk as $item): ?>
+            <tr>
+                <td><?= esc($item['id']) ?></td>
+                <td><?= esc($item['nama']) ?></td>
+                <td>Rp <?= number_format($item['harga'], 0, ',', '.') ?></td>
+                <td><?= esc($item['jumlah_stok']) ?></td>
+
+                <!-- STATUS DROPDOWN -->
+                <td>
+                    <form action="<?= base_url('admin/produk/' . $item['id']) ?>" method="POST">
+                        <?= csrf_field() ?>
+                        <select name="status" onchange="this.form.submit()" style="padding:5px; border-radius:4px;">
+                            <option value="Aktif" <?= $item['status'] == 'Aktif' ? 'selected' : '' ?>>Aktif</option>
+                            <option value="Tidak Aktif" <?= $item['status'] == 'Tidak Aktif' ? 'selected' : '' ?>>Tidak Aktif</option>
+                        </select>
+                    </form>
+                </td>
+
+                <!-- AKSI -->
+                <td style="text-align: center;">
+                    <a href="<?= base_url('admin/produk/' . $item['id'] . '/edit') ?>" class="action-edit">
+                        Edit
+                    </a>
+
+                    <!-- ICON TRASH -->
+                    <form action="<?= base_url('admin/produk/' . $item['id']) ?>" method="post"
+                          style="display: inline;"
+                          onsubmit="return confirm('Yakin ingin menghapus produk <?= esc($item['nama']) ?>?');">
+                        
+                        <input type="hidden" name="_method" value="DELETE">
+                        <?= csrf_field() ?>
+
+                        <button type="submit" class="action-hapus" title="Hapus">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+
     <?php endif; ?>
-    
 </div>
 
 <?= $this->endSection() ?>
