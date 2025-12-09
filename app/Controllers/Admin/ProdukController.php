@@ -195,4 +195,24 @@ class ProdukController extends BaseController
 
         return redirect()->to('/admin/produk')->with('success', 'Produk berhasil diupdate dan foto telah diganti.');
     }
+    public function delete($id = null)
+{
+    try {
+        $this->produkModel->delete($id);
+        return redirect()->to('/admin/produk')->with('success', 'produk#' . $id . ' berhasil dihapus.');
+    } catch (\Exception $e) {
+        // FK constraint mungkin gagal (misal jika ada entri di tabel lain yang merujuk)
+        return redirect()->back()->with('error', 'Gagal menghapus pesanan. Error: ' . $e->getMessage());
+    }
 }
+    public function updateStatus($id)
+{
+    $status = $this->request->getPost('status');
+
+    $model = new ProdukModel();
+    $model->update($id, ['status' => $status]);
+
+    return redirect()->back()->with('message', 'Status berhasil diperbarui');
+}
+}   
+    
