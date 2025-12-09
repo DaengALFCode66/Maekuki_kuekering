@@ -1,53 +1,80 @@
 <?= $this->extend('admin/layout') ?>
 
 <?= $this->section('content') ?>
-<h1>Manajemen Produk</h1>
+<?php
+// (Logika Sorting Stok Dibiarkan di sini tapi tidak digunakan di TH)
+$searchQuery = $searchQuery ?? ''; // Pastikan variabel ada
+?>
 
-<a href="<?= base_url('admin/produk/new') ?>" class="logout-btn" style="background: #25D366; margin-bottom: 20px; display: inline-block;">+ Tambah Produk Baru</a>
+<h1 class="dashboard-title">Manajemen Produk</h1>
 
-<div style="margin-bottom: 20px;">
-    <form action="<?= base_url('admin/produk') ?>" method="get" style="display: flex; gap: 10px;">
+<a href="<?= base_url('admin/produk/new') ?>" class="btn-tambah btn-success-primary"><i class="fas fa-plus"></i> Tambah Produk Baru</a>
+
+<div class="pesanan-controls search-only-control">
+    <form action="<?= base_url('admin/produk') ?>" method="get" class="search-form-control">
         <input type="text" name="search" placeholder="Cari berdasarkan nama produk..."
-            value="<?= esc($searchQuery ?? '') ?>"
-            style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 300px;">
+            value="<?= esc($searchQuery) ?>" class="input-search-pesanan">
 
-        <button type="submit" style="background-color: #8B4513; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
-            Cari
-        </button>
-        <a href="<?= base_url('admin/produk') ?>" style="text-decoration: none; padding: 8px 15px; border: 1px solid #ccc; border-radius: 4px; color: #333;">Reset</a>
+        <button type="submit" class="btn-cari"><i class="fas fa-search"></i> Cari</button>
+        <a href="<?= base_url('admin/produk') ?>" class="btn-reset"><i class="fas fa-redo-alt"></i> Reset</a>
     </form>
 </div>
 
-<div class="content-body">
+<div class="content-table-wrapper">
     <?php if (empty($produk)): ?>
-        <p>Belum ada produk terdaftar di database.</p>
+        <div class="alert alert-info">
+            <p><i class="fas fa-info-circle"></i> Belum ada produk terdaftar di database.</p>
+        </div>
     <?php else: ?>
-        <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+        <table class="order-table">
             <thead>
-                <tr style="background-color: #f2f2f2;">
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">ID</th>
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Nama</th>
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Harga</th>
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Stok</th>
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Status</th>
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Aksi</th>
+                <tr>
+                    <th style="width: 30px;">ID</th>
+                    <th>Nama</th>
+                    <th style="width: 120px;">Harga</th>
+                    <th style="width: 100px;">Stok</th>
+                    <th style="width: 120px; text-align: center;">Status</th>
+                    <th style="width: 80px; text-align: center;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($produk as $item): ?>
                     <tr>
-                        <td style="padding: 10px; border: 1px solid #ddd;"><?= esc($item['id']) ?></td>
-                        <td style="padding: 10px; border: 1px solid #ddd;"><?= esc($item['nama']) ?></td>
-                        <td style="padding: 10px; border: 1px solid #ddd;">Rp <?= number_format($item['harga'], 0, ',', '.') ?></td>
-                        <td style="padding: 10px; border: 1px solid #ddd;"><?= esc($item['jumlah_stok']) ?></td>
-                        <td style="padding: 10px; border: 1px solid #ddd;"><?= esc($item['status']) ?></td>
-                        <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">
-                            <a href="<?= base_url('admin/produk/' . $item['id'] . '/edit') ?>" style="color: blue; margin-right: 10px;">Edit</a>
+                        <td><?= esc($item['id']) ?></td>
+                        <td><strong><?= esc($item['nama']) ?></strong></td>
+                        <td>Rp <?= number_format($item['harga'], 0, ',', '.') ?></td>
+                        <td><?= esc($item['jumlah_stok']) ?></td>
+
+                        <td class="status-cell">
+                            <?php
+                            // Membersihkan dan menentukan status
+                            $dbStatus = strtolower(trim($item['status']));
+
+                            if ($dbStatus === 'aktif') {
+                                $statusClass = 'aktif';
+                                $statusLabel = 'AKTIF';
+                            } else {
+                                // Fallback: Semua status selain 'aktif' dianggap 'nonaktif'
+                                $statusClass = 'nonaktif';
+                                $statusLabel = 'NON-AKTIF';
+                            }
+                            ?>
+                            <span class="status-badge status-<?= $statusClass ?>">
+                                <?= $statusLabel ?>
+                            </span>
+                        </td>
+
+                        <td class="action-cell">
+                            <a href="<?= base_url('admin/produk/' . $item['id'] . '/edit') ?>" class="btn-action btn-edit" title="Edit Produk">
+                                <i class="fas fa-edit"></i>
+                            </a>
 
                             <form action="<?= base_url('admin/produk/' . $item['id']) ?>" method="post" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus produk <?= esc($item['nama']) ?>?');">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <?= csrf_field() ?>
-                                <button type="submit" style="color: red; background: none; border: none; cursor: pointer;">Hapus</button>
+                                <button type="submit" class="btn-action btn-delete" title="Hapus Produk">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
                             </form>
                         </td>
                     </tr>
@@ -55,7 +82,17 @@
             </tbody>
         </table>
     <?php endif; ?>
-    
+
 </div>
+
+<script>
+    // Di sini Anda bisa menambahkan JavaScript spesifik untuk halaman Manajemen Produk.
+    // Contoh: Logika untuk konfirmasi penghapusan produk di masa depan, atau
+    // event listener jika Anda mengaktifkan kembali fitur sorting stok via AJAX.
+
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Manajemen Produk dimuat.");
+    });
+</script>
 
 <?= $this->endSection() ?>

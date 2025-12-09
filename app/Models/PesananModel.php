@@ -15,12 +15,8 @@ class PesananModel extends Model
      * Mengambil semua pesanan dengan detail pengguna, produk, dan kuantitas.
      * Menggunakan JOIN untuk menggabungkan data dari 4 tabel.
      */
-    public function getAllPesananDetail($search = null, $sortBy = null)
+    public function getAllPesananDetail($search = null, $filterStatus = null, $sortOrder = 'normal')
     {
-        // 1. Join tabel pesanan dengan user (mendapatkan nama, alamat, telepon)
-        // 2. Join dengan detail_pesanan
-        // 3. Join dengan produk (mendapatkan nama produk)
-
         $builder = $this->db->table('pesanan');
         $builder->select('
             pesanan.*,
@@ -34,26 +30,33 @@ class PesananModel extends Model
         $builder->join('detail_pesanan', 'detail_pesanan.id_pesanan = pesanan.id');
         $builder->join('produk', 'produk.id = detail_pesanan.id_produk');
 
-        $builder->groupBy('pesanan.id'); // Kelompokkan berdasarkan ID Pesanan
-        $builder->orderBy('pesanan.tanggal_pesanan', 'DESC');
-
-        // --- FITUR SEARCH (CARI BERDASARKAN NAMA PELANGGAN) ---
+        // --- FILTERING ---
         if ($search) {
-            // Cari di kolom nama user
             $builder->like('user.nama', $search);
+        }
+
+        // KUNCI: FILTER STATUS (Mengganti nama parameter lama $sortBy menjadi $filterStatus)
+        if ($filterStatus && in_array($filterStatus, ['proses', 'batal', 'selesai'])) {
+            $builder->where('pesanan.status', $filterStatus);
         }
 
         $builder->groupBy('pesanan.id');
 
-        // --- FITUR SORT (URUTKAN BERDASARKAN STATUS) ---
-        if ($sortBy && in_array($sortBy, ['proses', 'batal', 'selesai'])) {
-            // Jika ada kriteria sort, filter berdasarkan status tersebut
-            $builder->where('pesanan.status', $sortBy);
+        // --- SORTING HARGA (FITUR BARU) ---
+        if ($sortOrder === 'asc') {
+            $builder->orderBy('pesanan.total_harga', 'ASC'); // Termurah
+        } elseif ($sortOrder === 'desc') {
+            $builder->orderBy('pesanan.total_harga', 'DESC'); // Termahal
+        } else {
+            // Urutan default (Normal): Berdasarkan Tanggal Terbaru
+            $builder->orderBy('pesanan.tanggal_pesanan', 'DESC');
         }
 
-        // Default sort: terbaru dulu, lalu urutkan status
-        $builder->orderBy('pesanan.tanggal_pesanan', 'DESC');
-        $builder->orderBy('pesanan.status', 'ASC');
+        // Urutan sekunder (agar pesanan dengan status sama tertata rapi)
+        // Order by Status harus diletakkan setelah order utama (harga/tanggal)
+        if ($sortOrder === 'normal') {
+            $builder->orderBy('pesanan.status', 'ASC');
+        }
 
         return $builder->get()->getResultArray();
     }

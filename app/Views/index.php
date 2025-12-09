@@ -115,6 +115,17 @@
             <p class="subtitle">KOLEKSI TERBAIK</p>
             <h2>Katalog Kue Kering</h2>
             <p class="description"></p>
+
+            <div class="search-container">
+                <form id="search-form" action="" method="GET">
+                    <input type="text" id="search-input" name="keyword" placeholder="Cari Nastar, Kastengel, atau kue lainnya..." required>
+                    <button type="submit" class="search-btn" aria-label="Cari Produk">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+            <div class="product-grid" id="product-list">
+            </div>
         </div>
 
         <div class="produk-grid-wrapper">
@@ -396,40 +407,54 @@
         }
 
         // --- Fungsi untuk memuat konten katalog melalui AJAX ---
-        async function loadKatalogPage(url) {
-            // 1. Tampilkan indikator loading (opsional)
+        async function loadKatalogPage(page = 1, keyword = '') {
             const katalogContainer = document.getElementById('katalogProduk');
             const paginationControls = document.querySelector('.pagination-controls');
 
-            katalogContainer.style.opacity = '0.5'; // Efek loading
+            katalogContainer.style.opacity = '0.5';
 
             try {
-                const response = await fetch(url);
-                const data = await response.text(); // Ambil seluruh HTML baru
+                // --- KUNCI PERUBAHAN: BUAT URL DENGAN KEYWORD & PAGE ---
+                let url = base_url('api/products') + `?page=${page}`;
+                if (keyword) {
+                    url += `&keyword=${encodeURIComponent(keyword)}`;
+                }
+                // Pastikan Anda mengubah base_url('api/products') sesuai dengan Controller Anda
 
-                // 2. Cari elemen-elemen kunci dari respons HTML baru
+                const response = await fetch(url);
+
+                // Jika respons tidak OK (misalnya 404, 500)
+                if (!response.ok) {
+                    throw new Error('Gagal terhubung ke API: Status ' + response.status);
+                }
+
+                const data = await response.text();
+                // ... (lanjutan logika parsing HTML) ...
+
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(data, 'text/html');
 
+                // PENTING: Jika produk kosong, tangani juga di sini
                 const newKatalogContent = doc.getElementById('katalogProduk').innerHTML;
                 const newPaginationLinks = doc.querySelector('.pagination-links').innerHTML;
-                const newPaginationInfo = doc.querySelector('.pagination-controls p').innerHTML;
+                // newPaginationInfo tidak digunakan, bisa dihapus atau dilewatkan
 
-                // 3. Ganti konten di halaman saat ini
                 katalogContainer.innerHTML = newKatalogContent;
                 document.querySelector('.pagination-links').innerHTML = newPaginationLinks;
+
+                // ... (lanjutkan inisialisasi listener) ...
 
                 initCatalogListeners();
                 initPaginationListeners();
 
-                // 4. Update URL browser tanpa reload (HTML5 History API)
+                // Update URL browser dengan parameter pencarian baru
                 history.pushState(null, '', url);
 
             } catch (error) {
                 console.error('Error memuat katalog via AJAX:', error);
-                alert('Gagal memuat halaman baru.');
+                alert('Gagal memuat katalog. Error: ' + error.message);
             } finally {
-                katalogContainer.style.opacity = '1'; // Hapus efek loading
+                katalogContainer.style.opacity = '1';
             }
         }
 
@@ -448,15 +473,18 @@
 
         // --- FUNGSI HANDLER UNTUK KLIK PAGINATION ---
         function handlePaginationClick(event) {
-            // 1. Mencegah link berjalan ke URL secara normal (mencegah reload halaman)
             event.preventDefault();
 
-            // 2. Ambil URL (href) dari link yang diklik
             const newUrl = this.getAttribute('href');
 
-            // 3. Panggil fungsi pemuat katalog dengan URL baru
             if (newUrl) {
-                loadKatalogPage(newUrl);
+                // KUNCI PERBAIKAN: Pisahkan URL menjadi page dan keyword
+                const urlParams = new URLSearchParams(newUrl.split('?')[1]);
+                const page = urlParams.get('page') || 1;
+                const keyword = urlParams.get('keyword') || ''; // Ambil keyword dari URL pagination
+
+                // Panggil loadKatalogPage dengan page dan keyword yang diekstrak
+                loadKatalogPage(page, keyword);
             }
         }
 
@@ -683,6 +711,33 @@
         // --- D. Event Listeners ---
         document.addEventListener('DOMContentLoaded', () => {
 
+
+            const searchForm = document.getElementById('search-form');
+            const searchInput = document.getElementById('search-input');
+
+            if (searchForm) {
+                searchForm.addEventListener('submit', function(e) {
+                    e.preventDefault(); // Mencegah form submit default
+
+                    const keyword = searchInput.value.trim(); // Ambil nilai dan hapus spasi
+
+                    // PANGGIL FUNGSI PEMUATAN KATALOG dengan keyword (bisa kosong)
+                    loadKatalogPage(1, keyword);
+                });
+
+                // KUNCI PERBAIKAN: EVENT LISTENER UNTUK DETEKSI KEYWORD KOSONG
+                searchInput.addEventListener('input', function() {
+                    // Jika input dikosongkan (setelah di-search), muat ulang katalog penuh
+                    if (this.value.trim() === '') {
+                        // Berikan sedikit delay untuk menghindari panggilan terlalu cepat
+                        setTimeout(() => {
+                            // Panggil loadKatalogPage dengan keyword kosong (melihat semua produk)
+                            loadKatalogPage(1, '');
+                        }, 300); // Delay 300ms
+                    }
+                });
+            }
+
             // --- 1. INISIALISASI SEMUA ELEMEN HTML DI SINI ---
             // Elemen Keranjang
             cartCountElement = document.getElementById('cart-count');
@@ -821,7 +876,7 @@
                         // Kirim notifikasi WhatsApp
                         // Tambahkan di bagian Global Variables (sekitar baris 630 di script Anda)
                         // Anggap nomor WA Admin adalah: 0812-3456-7890 (sesuai contoh di Footer Anda)
-                        const ADMIN_PHONE = '6281234567890'; // Format internasional tanpa tanda tambah (+)
+                        const ADMIN_PHONE = '6283144310325'; // Format internasional tanpa tanda tambah (+)
                         let waMessage = `Halo Admin, saya telah melakukan pemesanan (ID: ${result.id_pesanan}). Mohon konfirmasi pesanan saya.`;
                         // GANTI KODE LINK WHATSAPP DENGAN INI:
                         let fullMessage = `Halo Admin, saya telah melakukan pemesanan (ID: ${result.id_pesanan}). Mohon konfirmasi pesanan saya.

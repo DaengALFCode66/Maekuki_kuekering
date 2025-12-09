@@ -8,6 +8,9 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Home::index');
 
 $routes->post('api/checkout', 'CheckoutController::process');
+// --- Rute API ---
+// Pastikan rute ini berada di luar rute Admin
+$routes->get('api/products', 'ProductApiController::index');
 // Route untuk Panel Admin
 $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($routes) {
     // Login / Logout
@@ -18,6 +21,8 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
     // Dashboard dan Produk
     $routes->get('dashboard', 'DashboardController::index');
     $routes->resource('produk', ['controller' => 'ProdukController']); // Untuk CRUD Produk
+
+    $routes->post('produk/create', 'ProdukController::create');
 
     // Manajemen Pesanan
     $routes->get('pesanan', 'PesananController::index');

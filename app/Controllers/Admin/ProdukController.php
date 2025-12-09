@@ -47,23 +47,58 @@ class ProdukController extends BaseController
     }
 
     // SIMPAN PRODUK BARU
+    // app/Controllers/Admin/ProdukController.php
+
     public function create()
     {
-        // Logika validasi dan penyimpanan
+        $fileGambar = $this->request->getFile('gambar');
+        $newStok = $this->request->getPost('jumlah_stok');
+        $currentDateTime = date('Y-m-d H:i:s');
+        $db = $this->produkModel->db;
+        $db->transBegin(); // Mulai Transaksi
 
-        // Ambil semua data dari form POST
-        $data_baru = [
-            'nama'       => $this->request->getPost('nama'),
-            'deskripsi'  => $this->request->getPost('deskripsi'),
-            'harga'      => $this->request->getPost('harga'),       // <-- DITAMBAHKAN
-            'url_gambar' => $this->request->getPost('url_gambar'),  // <-- DITAMBAHKAN
-            'status'     => $this->request->getPost('status'),
-        ];
+        try {
+            $namaGambarBaru = null;
 
-        // Simpan data ke database melalui Model
-        $this->produkModel->save($data_baru);
+            // 1. LOGIKA FILE UPLOAD
+            if ($fileGambar && $fileGambar->isValid() && !$fileGambar->hasMoved()) {
+                $namaGambarBaru = $fileGambar->getRandomName();
+                // Pindahkan file ke direktori target (public/assets/Asset)
+                $fileGambar->move(ROOTPATH . 'public/assets/Asset', $namaGambarBaru);
+            }
 
-        return redirect()->to('/admin/produk')->with('success', 'Produk berhasil ditambahkan.');
+            // 2. SIMPAN DATA PRODUK UTAMA
+            $data_baru = [
+                'nama'       => $this->request->getPost('nama'),
+                'deskripsi'  => $this->request->getPost('deskripsi'),
+                'harga'      => $this->request->getPost('harga'),
+                'status'     => $this->request->getPost('status'),
+                'url_gambar' => $namaGambarBaru, // Simpan nama file
+            ];
+
+            // Simpan data produk dan dapatkan ID produk yang baru dibuat
+            $this->produkModel->insert($data_baru);
+            $newProductId = $this->produkModel->getInsertID();
+
+            // 3. SIMPAN DATA STOK
+            if ($newProductId && $newStok >= 0) {
+                $this->stokModel->insert([
+                    'id_produk'      => $newProductId,
+                    'jumlah_stok'    => $newStok,
+                    'tanggal_update' => $currentDateTime,
+                ]);
+            }
+
+            $db->transCommit();
+            return redirect()->to('/admin/produk')->with('success', 'Produk dan stok awal berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            $db->transRollback();
+            // Hapus file yang sudah diupload jika transaksi gagal
+            if ($namaGambarBaru && file_exists(ROOTPATH . 'public/assets/Asset/' . $namaGambarBaru)) {
+                unlink(ROOTPATH . 'public/assets/Asset/' . $namaGambarBaru);
+            }
+            return redirect()->back()->with('error', 'Gagal menambahkan produk: ' . $e->getMessage());
+        }
     }
 
 

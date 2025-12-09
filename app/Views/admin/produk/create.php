@@ -1,41 +1,50 @@
 <?= $this->extend('admin/layout') ?>
 
 <?= $this->section('content') ?>
-    <h1>Tambah Produk Baru</h1>
-    <a href="<?= base_url('admin/produk') ?>" style="margin-bottom: 15px; display: inline-block;">&larr; Kembali ke Daftar Produk</a>
+    <div class="admin-form-container"> 
+        <h1 class="form-title">Tambah Produk Baru</h1>
+        <a href="<?= base_url('admin/produk') ?>" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali ke Daftar Produk</a>
 
-    <form action="<?= base_url('admin/produk') ?>" method="post"> 
-        <?= csrf_field() ?>
+        <form action="<?= base_url('admin/produk/create') ?>" method="post" class="product-form" enctype="multipart/form-data"> 
+            <?= csrf_field() ?>
 
-        <div style="margin-bottom: 15px;">
-            <label for="nama" style="display: block; font-weight: bold;">Nama Produk:</label>
-            <input type="text" id="nama" name="nama" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-        </div>
-        
-        <div style="margin-bottom: 15px;">
-            <label for="deskripsi" style="display: block; font-weight: bold;">Deskripsi:</label>
-            <textarea id="deskripsi" name="deskripsi" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
-        </div>
-        
-        <div style="margin-bottom: 15px;">
-            <label for="harga" style="display: block; font-weight: bold;">Harga (Rp):</label>
-            <input type="number" id="harga" name="harga" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-        </div>
+            <div class="form-group">
+                <label for="nama">Nama Produk:</label>
+                <input type="text" id="nama" name="nama" required class="form-input">
+            </div>
+            
+            <div class="form-group">
+                <label for="deskripsi">Deskripsi:</label>
+                <textarea id="deskripsi" name="deskripsi" rows="4" class="form-input"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="harga">Harga (Rp):</label>
+                <input type="number" id="harga" name="harga" required class="form-input" step="0.01">
+            </div>
 
-        <div style="margin-bottom: 15px;">
-            <label for="status" style="display: block; font-weight: bold;">Status:</label>
-            <select id="status" name="status" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-                <option value="aktif">Aktif</option>
-                <option value="non-aktif">Non-Aktif</option>
-            </select>
-        </div>
-        
-        <div style="margin-bottom: 15px;">
-            <label for="url_gambar" style="display: block; font-weight: bold;">Nama File Gambar (ex: nastar.png):</label>
-            <input type="text" id="url_gambar" name="url_gambar" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-            <small style="color: #888;">Pastikan file gambar sudah ada di folder assets/Asset/</small>
-        </div>
+            <div class="form-group">
+                <label for="jumlah_stok">Jumlah Stok Awal:</label>
+                <input type="number" id="jumlah_stok" name="jumlah_stok" value="0" min="0" required class="form-input">
+            </div>
+            
+            <div class="form-group">
+                <label for="status">Status:</label>
+                <select id="status" name="status" class="form-input">
+                    <option value="aktif">Aktif</option>
+                    <option value="nonaktif">Non-Aktif</option>
+                </select>
+            </div>
+            
+            <div class="form-group file-upload-group">
+                <label for="gambar_file">Tambah Foto Produk:</label>
+                <input type="file" id="gambar_file" name="gambar" accept="image/*" required> 
+                <small class="form-help-text">Pilih file gambar (JPG/PNG). File akan otomatis disimpan ke folder aset.</small>
+            </div>
 
-        <button type="submit" class="logout-btn" style="background: #8B4513;">Simpan Produk</button>
-    </form>
+            <div class="form-action">
+                <button type="submit" class="btn-submit-product">Simpan Produk</button>
+            </div>
+        </form>
+    </div>
 <?= $this->endSection() ?>

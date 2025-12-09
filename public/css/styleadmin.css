@@ -1,0 +1,1450 @@
+/* ================================== */
+/* LAYOUT UTAMA ADMIN PANEL */
+/* ================================== */
+
+/* Container Utama */
+.admin-wrapper {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8f9fa; /* Latar belakang halaman utama */
+}
+
+/* 1. SIDEBAR (NAVIGASI KIRI) */
+.sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    background-color: var(--color-dark-bg); /* Coklat Gelap */
+    color: #fff;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header {
+    padding: 20px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+/* Logo Maekuki Gambar */
+.admin-logo img {
+    height: 50px; /* Ukuran yang terlihat baik di sidebar */
+    width: auto;
+}
+
+/* Navigasi */
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav li a {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.sidebar-nav li a:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-nav li.active a {
+    /* Warna aktif Emas (Secondary) */
+    background-color: var(--color-secondary); 
+    color: var(--color-primary); /* Teks Coklat Tua */
+    font-weight: 600;
+}
+
+.sidebar-nav li i {
+    margin-right: 10px;
+    font-size: 1.1rem;
+}
+
+/* 2. KONTEN UTAMA (HEADER & MAIN) */
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header Top Bar */
+.admin-header {
+    background-color: #fff;
+    padding: 15px 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.header-greeting h4 {
+    margin: 0;
+    color: var(--color-text-dark);
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.btn-logout {
+    background-color: #dc3545; /* Merah untuk Logout */
+    color: white;
+    padding: 8px 15px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.btn-logout:hover {
+    background-color: #c82333;
+}
+
+/* Konten Body */
+.content-body {
+    padding: 20px;
+    flex-grow: 1;
+}
+
+/* Media Query untuk Mobile */
+@media (max-width: 768px) {
+    .sidebar {
+        /* Sembunyikan sidebar secara default di mobile */
+        width: 0;
+        position: fixed;
+        height: 100%;
+        overflow-x: hidden;
+        transition: 0.5s;
+        z-index: 2000;
+    }
+    .main-content {
+        margin-left: 0;
+    }
+    /* Anda mungkin perlu menambahkan JavaScript untuk membuka/menutup sidebar di mobile */
+}
+
+/* ================================== */
+/* STYLING DASHBOARD ADMIN */
+/* ================================== */
+
+.dashboard-content-wrapper {
+    padding: 30px;
+}
+
+.dashboard-title {
+    color: #8B4513; /* Coklat Tua */
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.dashboard-subtitle {
+    color: #555;
+    margin-bottom: 25px;
+}
+
+.stat-heading {
+    color: #8B4513;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 5px;
+}
+
+/* 1. Tata Letak Baris Metrik (Flexbox/Grid) */
+.stat-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+/* Untuk status pesanan, kita bisa menggunakan 3 kolom */
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Responsif 3 kolom */
+}
+
+/* 2. Style Kartu Metrik */
+.stat-card {
+    flex-grow: 1;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid; /* Garis warna di kiri */
+    transition: transform 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stat-value {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #333;
+}
+
+/* 3. Penyesuaian Warna Kartu */
+.stat-primary {
+    border-color: #DAA520; /* Emas (Produk Aktif) */
+    background-color: #fffbe6; /* Background sangat muda */
+}
+
+.stat-secondary {
+    border-color: #4CAF50; /* Hijau (Pesanan Baru Hari Ini) */
+    background-color: #f6fff6;
+}
+
+.stat-waiting {
+    border-color: #FFC107; /* Kuning/Amber (Menunggu Pembayaran) */
+}
+
+.stat-processing {
+    border-color: #17A2B8; /* Biru (Diproses/Dikirim) */
+}
+
+.stat-completed {
+    border-color: #28A745; /* Hijau Tua (Selesai) */
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .stat-row {
+        flex-direction: column; /* Tumpuk semua kartu di mobile */
+    }
+}
+
+/* ================================== */
+/* MANAJEMEN PRODUK: TABEL & FORM */
+/* ================================== */
+
+/* --- 1. Tombol Aksi --- */
+.btn-tambah {
+    background: #4CAF50 !important; /* Hijau */
+    color: white !important;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s;
+    margin-bottom: 25px;
+}
+.btn-tambah:hover {
+    background: #45a049 !important;
+}
+
+/* --- 2. Form Pencarian --- */
+.search-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    align-items: center;
+}
+.search-form input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 300px;
+    transition: border-color 0.3s;
+}
+.search-form input[type="text"]:focus {
+    border-color: var(--color-secondary); /* Emas saat fokus */
+    outline: none;
+}
+.btn-cari, .btn-reset {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: opacity 0.3s;
+}
+.btn-cari {
+    background-color: var(--color-primary); /* Coklat */
+    color: white;
+}
+.btn-reset {
+    background-color: #f1f1f1;
+    color: var(--color-text-dark);
+    border: 1px solid #ddd;
+}
+
+/* --- 3. Tabel Produk (index.php) --- */
+.product-table {
+    width: 100%;
+    border-collapse: separate; /* Gunakan separate untuk border-radius */
+    border-spacing: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 8px; /* Border radius untuk tabel */
+    overflow: hidden; /* Penting untuk radius */
+}
+
+.product-table thead tr {
+    background-color: var(--color-primary); /* Header Coklat */
+    color: white;
+}
+
+.product-table th, .product-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border: none; /* Hapus border internal */
+    border-bottom: 1px solid #eee; /* Beri garis bawah antar baris */
+}
+
+.product-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Zebra striping */
+}
+
+/* Aksi Edit/Hapus */
+.action-links a {
+    text-decoration: none;
+    margin-right: 10px;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+.action-links a.edit {
+    color: #007bff;
+}
+.action-links button.delete {
+    color: #dc3545;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 0;
+}
+
+/* ================================== */
+/* PERBAIKAN FORM (CREATE/EDIT) */
+/* ================================== */
+
+/* Container Utama Form */
+.admin-form-container {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Grouping Label dan Input */
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group label {
+    display: block;
+    font-weight: 700;
+    color: var(--color-primary); /* Coklat Tua */
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+/* Input, Textarea, Select */
+.form-group input:not([type="file"]), 
+.form-group textarea, 
+.form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #D6BC91; /* Border Coklat Muda */
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+/* Efek Fokus Input */
+.form-group input:focus, 
+.form-group textarea:focus, 
+.form-group select:focus {
+    border-color: var(--color-secondary); /* Emas saat fokus */
+    box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.2);
+    outline: none;
+}
+
+/* Area Foto Produk (Edit.php) */
+.image-preview-box {
+    border: 2px dashed var(--color-light-border); /* Border dash krem */
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 10px;
+    margin-bottom: 30px; /* Jarak bawah lebih besar */
+}
+
+.image-preview-box label {
+    color: var(--color-text-dark);
+}
+
+.image-preview-box img {
+    max-width: 150px;
+    height: auto;
+    border-radius: 4px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Tombol Update Produk */
+.btn-update-form {
+    background: var(--color-primary); /* Coklat Tua */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-transform: uppercase;
+}
+.btn-update-form:hover {
+    background: #6a350e; /* Coklat yang sedikit lebih gelap */
+}
+
+/* Tombol Kembali */
+.btn-back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: #555;
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+.btn-back-link:hover {
+    background-color: #f1f1f1;
+    color: var(--color-primary);
+}
+
+/* --- 5. Responsif (Mobile View) --- */
+@media (max-width: 768px) {
+    .product-table {
+        /* Memastikan tabel bisa discroll horizontal */
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    .product-table thead, .product-table tbody, .product-table tr, .product-table th, .product-table td {
+        /* Atur ulang display untuk tumpukan */
+        display: block;
+    }
+    /* ... (Atur ulang tampilan form di mobile jika perlu) ... */
+}
+
+.form-title {
+    color: var(--color-primary); /* Coklat Tua */
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+/* Tombol Kembali */
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-secondary); /* Emas */
+    text-decoration: none;
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+}
+.btn-back i {
+    transform: rotate(180deg); /* Balik ikon panah (jika menggunakan fa-arrow-right) */
+}
+.btn-back:hover {
+    color: #ffc107;
+}
+
+/* Form Group */
+.product-form .form-group {
+    margin-bottom: 20px;
+}
+
+.product-form label {
+    display: block;
+    font-weight: 600;
+    color: var(--color-text-dark);
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+/* Input Fields, Textarea, dan Select */
+.product-form input[type="text"],
+.product-form input[type="number"],
+.product-form textarea,
+.product-form select {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: var(--color-text-dark);
+    background-color: #fcfcfc;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box; 
+}
+
+.product-form textarea {
+    resize: vertical; 
+    min-height: 100px;
+}
+
+/* Efek Fokus */
+.product-form input:focus,
+.product-form textarea:focus,
+.product-form select:focus {
+    border-color: var(--color-secondary); 
+    box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.2); 
+    outline: none;
+}
+
+/* Teks Bantuan */
+.form-help-text {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.85rem;
+    color: #777;
+}
+
+/* Tombol Simpan (Button Submit) */
+.form-action {
+    margin-top: 30px;
+}
+.btn-submit-product {
+    background-color: var(--color-primary); /* Coklat Tua */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-submit-product:hover {
+    background-color: #6a350e; /* Coklat yang lebih gelap */
+}
+
+
+/* ================================== */
+/* PERBAIKAN STYLING INPUT FILE KHUSUS */
+/* ================================== */
+
+/* Container untuk file input kustom */
+.custom-file-upload {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+/* Sembunyikan input file bawaan */
+.file-input-hidden {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+/* Style untuk Tombol Kustom (Label) */
+.file-upload-label {
+    background-color: var(--color-secondary); /* Emas */
+    color: var(--color-primary);
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    white-space: nowrap; /* Penting agar tombol tidak pecah */
+    border: 1px solid var(--color-secondary);
+}
+
+.file-upload-label:hover {
+    background-color: #ffc107; /* Emas yang lebih terang */
+}
+
+.file-upload-label i {
+    margin-right: 8px;
+}
+
+/* Style untuk Tampilan Nama File */
+.file-name-display {
+    font-style: italic;
+    color: #555;
+    font-size: 0.9rem;
+    padding: 8px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 50%;
+}
+
+/* ================================== */
+/* MANAJEMEN PESANAN - UMUM */
+/* ================================== */
+
+/* --- 1. Form Filter/Cari di Daftar Pesanan --- */
+.pesanan-controls {
+    display: flex;
+    flex-wrap: wrap; /* Penting untuk responsif */
+    gap: 15px 20px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+.pesanan-controls form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.pesanan-controls input[type="text"],
+.pesanan-controls select {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: border-color 0.3s;
+}
+
+/* --- 2. Tabel Pesanan (index.php) --- */
+.order-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 0.9rem;
+}
+
+.order-table thead tr {
+    background-color: var(--color-primary); /* Header Coklat */
+    color: white;
+}
+
+.order-table th, .order-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.order-table td {
+    vertical-align: top; /* Rata atas */
+}
+
+/* Tampilan Detail Pesanan di Tabel */
+.order-details-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.85rem;
+}
+.order-details-list li {
+    margin-bottom: 3px;
+    color: #555;
+}
+
+/* --- 3. Status Badge Warna --- */
+.status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: white;
+    text-align: center;
+}
+
+/* Warna Status */
+.status-badge.proses, .status-badge.processing {
+    background-color: #007bff; /* Biru */
+}
+.status-badge.selesai, .status-badge.completed {
+    background-color: #28a745; /* Hijau */
+}
+.status-badge.batal, .status-badge.cancelled {
+    background-color: #dc3545; /* Merah */
+}
+
+/* ================================== */
+/* EDIT PESANAN (edit.php) */
+/* ================================== */
+
+/* Kontainer Utama Form Edit (Ganti flex 2 kolom) */
+.edit-pesanan-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Data Pelanggan (1) vs Detail Pesanan (2) */
+    gap: 30px;
+}
+
+/* Kotak Data Pelanggan */
+.data-pelanggan-box, .detail-pesanan-box {
+    padding: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.data-pelanggan-box h2, .detail-pesanan-box h2 {
+    color: var(--color-primary);
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* Styling Input/Select di Edit Pesanan */
+.edit-pesanan-grid .form-group label {
+    font-weight: 600;
+    color: #555;
+}
+.edit-pesanan-grid input,
+.edit-pesanan-grid select,
+.edit-pesanan-grid textarea {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+/* Detail Item Baris */
+.detail-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #eee;
+    align-items: center;
+}
+
+.detail-item select, .detail-item input[type="number"] {
+    flex-grow: 1;
+}
+.detail-item input[type="number"] {
+    width: 80px;
+    text-align: center;
+    flex-grow: 0;
+}
+
+/* Tombol Hapus Produk */
+.btn-hapus-detail {
+    background: #dc3545 !important;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Tombol Tambah Produk */
+#add-product-btn {
+    background: var(--color-secondary) !important; /* Emas */
+    color: var(--color-primary) !important;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+/* Tombol Simpan Perubahan Utama */
+.btn-simpan-pesanan {
+    background: #28a745 !important; /* Hijau untuk Simpan */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 700;
+    margin-top: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 992px) {
+    .order-table {
+        /* Memastikan tabel bisa discroll horizontal */
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    .edit-pesanan-grid {
+        grid-template-columns: 1fr; /* Stack di mobile */
+    }
+}
+
+/* ================================== */
+/* STYLING MANAJEMEN PESANAN */
+/* ================================== */
+
+/* 1. Kontrol Pencarian dan Filter */
+.pesanan-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    gap: 20px;
+}
+
+.pesanan-controls form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pesanan-controls input[type="text"] {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    width: 250px;
+}
+
+.pesanan-controls .btn-cari {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.pesanan-controls .btn-reset {
+    color: #dc3545; /* Merah untuk Reset */
+    text-decoration: none;
+    padding: 8px 0;
+    font-size: 0.95rem;
+}
+
+/* 2. Style Tabel Pesanan */
+.order-table {
+    width: 100%;
+    border-collapse: separate; /* Penting untuk border-radius */
+    border-spacing: 0;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Bayangan pada tabel */
+    overflow: hidden; /* Memastikan sudut tumpul terlihat */
+}
+
+.order-table thead th {
+    background-color: var(--color-primary); 
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 12px 15px;
+    vertical-align: middle;
+}
+
+/* 3. Style Kolom Detail Pesanan */
+.order-details-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.order-details-list li {
+    line-height: 1.4;
+    margin-bottom: 3px;
+    /* Memberi ruang untuk teks panjang */
+    word-break: break-word; 
+}
+
+/* WARNA PADA KUANTITAS (QTY) */
+.order-details-list .qty-colored {
+    color: #E60023; /* Merah cerah untuk penekanan */
+    font-weight: 700;
+    margin-right: 5px;
+}
+
+/* 4. Style Kolom Tanggal Pesanan */
+.tgl-pesanan-cell {
+    white-space: nowrap; 
+    padding: 8px 15px;
+}
+.tgl-pesanan-cell .date-display {
+    display: block;
+    font-weight: 700;
+    color: var(--color-primary); /* Coklat Tua untuk Tanggal */
+    font-size: 1rem;
+    line-height: 1.2;
+}
+.tgl-pesanan-cell .time-display {
+    display: block;
+    font-size: 0.8rem;
+    color: #6c757d; /* Abu-abu gelap untuk Jam */
+}
+
+/* 5. Style Kolom Aksi (Ikon) */
+.action-cell {
+    white-space: nowrap;
+    text-align: center !important;
+}
+
+/* Tombol Aksi Ikon */
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    margin: 0 3px;
+    border-radius: 50%; /* Bulat */
+    text-decoration: none;
+    transition: all 0.2s;
+    font-size: 1rem;
+}
+
+.btn-edit {
+    color: var(--color-secondary); /* Emas */
+    background-color: rgba(218, 165, 32, 0.1);
+}
+.btn-edit:hover {
+    background-color: rgba(218, 165, 32, 0.3);
+}
+
+.btn-delete {
+    color: #dc3545; /* Merah */
+    background-color: rgba(220, 53, 69, 0.1);
+    border: none; /* Karena ini adalah <button> di dalam <form> */
+    cursor: pointer;
+}
+.btn-delete:hover {
+    background-color: rgba(220, 53, 69, 0.3);
+}
+
+/* Sel Header dan Data */
+.order-table th, 
+.order-table td {
+    padding: 12px 15px;
+    text-align: left;
+    /* Garis Bawah (Horizontal) tetap ada */
+    border-bottom: 1px solid #e0e0e0; 
+    
+    /* KUNCI: Garis Kanan (Vertikal) Tipis dan Lembut */
+    border-right: 1px solid #f0f0f0; /* Garis sangat tipis */
+    vertical-align: top; /* Agar konten sejajar di atas */
+}
+
+.order-table th {
+    /* Garis Kanan pada Header */
+    background-color: var(--color-primary);
+    color: white;
+    font-weight: 600;
+}
+
+/* Hapus Garis Batas pada Kolom Terakhir */
+.order-table th:last-child, 
+.order-table td:last-child {
+    border-right: none;
+}
+
+/* Penyesuaian padding untuk kolom status/aksi agar tetap rapi */
+.order-table .status-cell,
+.order-table .action-cell,
+.order-table .tgl-pesanan-cell {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+/* ================================== */
+/* STYLING STATUS BADGE (Pewarnaan) */
+/* ================================== */
+
+/* Style Dasar Status Badge (untuk elemen SPAN) */
+.status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 60px; /* Lebar minimum agar terlihat seragam */
+}
+
+/* 1. Status PROSES / Diproses */
+.status-badge.status-proses {
+    background-color: #ffe0b2; /* Oranye Muda */
+    color: #ef6c00; /* Oranye Tua */
+    border: 1px solid #ffcc80;
+}
+
+/* 2. Status SELESAI */
+.status-badge.status-selesai {
+    background-color: #e8f5e9; /* Hijau Muda */
+    color: #2e7d32; /* Hijau Tua */
+    border: 1px solid #a5d6a7;
+}
+
+/* 3. Status BATAL */
+.status-badge.status-batal {
+    background-color: #ffcdd2; /* Merah Muda */
+    color: #c62828; /* Merah Tua */
+    border: 1px solid #ef9a9a;
+}
+
+/* Penyesuaian Kolom Status agar lebih rapi */
+.order-table .status-cell {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+/* ================================== */
+/* STYLING SORTING HEADER HARGA */
+/* ================================== */
+
+/* Container Header yang Dapat Diklik */
+.order-table th.sortable-header {
+    cursor: pointer;
+    position: relative;
+    /* Hilangkan background bawaan hover di TH agar link terlihat jelas */
+    transition: background-color 0.2s;
+}
+
+/* Link Sort */
+.sortable-header .sort-link {
+    display: flex;
+    justify-content: flex-end; /* Posisikan ke kanan (sesuai alignment harga) */
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    width: 100%;
+    font-weight: 600;
+}
+
+.sortable-header .sort-link:hover {
+    color: #ffc107; /* Emas saat hover */
+}
+
+/* Ikon Sorting */
+.sortable-header .sort-link i {
+    font-size: 0.8em;
+    margin-left: 5px;
+}
+
+/* ================================== */
+/* STYLING STATUS DROPDOWN & PEWARNAAN */
+/* ================================== */
+
+/* Style Dasar Dropdown Status */
+.status-select {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 80px; /* Lebar minimum agar terlihat seragam */
+    cursor: pointer;
+    border: 1px solid transparent; /* Default transparent */
+    transition: all 0.2s;
+}
+
+/* 1. Status PROSES / Diproses */
+.status-select.status-proses {
+    background-color: #ffe0b2; /* Oranye Muda */
+    color: #ef6c00; /* Oranye Tua */
+    border-color: #ffcc80;
+}
+
+/* 2. Status SELESAI */
+.status-select.status-selesai {
+    background-color: #e8f5e9; /* Hijau Muda */
+    color: #2e7d32; /* Hijau Tua */
+    border-color: #a5d6a7;
+}
+
+/* 3. Status BATAL */
+.status-select.status-batal {
+    background-color: #ffcdd2; /* Merah Muda */
+    color: #c62828; /* Merah Tua */
+    border-color: #ef9a9a;
+}
+
+/* ================================== */
+/* STYLING EDIT PESANAN */
+/* ================================== */
+
+.edit-pesanan-wrapper {
+    padding: 0 10px;
+}
+
+.page-title {
+    color: var(--color-primary); 
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+/* Tombol Kembali */
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-secondary); /* Emas */
+    text-decoration: none;
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+.btn-back:hover {
+    color: #ffc107;
+}
+
+/* Tata Letak 2 Kolom */
+.form-grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr; /* Kanan lebih lebar untuk detail */
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+/* Style Kartu Umum */
+.card-box {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-size: 1.3rem;
+    color: var(--color-primary);
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+.card-title i {
+    margin-right: 10px;
+    color: var(--color-secondary);
+}
+
+/* Form Groups dan Input */
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: var(--color-text-dark);
+    margin-bottom: 5px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+.form-input:focus {
+    border-color: var(--color-secondary);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(218, 165, 32, 0.2);
+}
+
+/* Status Select */
+.status-select-group {
+    margin-top: 25px;
+}
+/* Style status select di sini (gunakan CSS badge yang sudah kita buat) */
+
+/* -------------------- */
+/* DETAIL PESANAN SECTION */
+/* -------------------- */
+
+.detail-items-container-scroll {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 15px;
+    margin-bottom: 20px;
+}
+
+.item-row {
+    display: flex;
+    align-items: center; 
+    gap: 10px;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px dashed #f0f0f0;
+    border-radius: 6px;
+    transition: background-color 0.1s;
+}
+.item-row:hover {
+    background-color: #fafafa;
+}
+
+.item-produk-select {
+    flex-grow: 1;
+    padding: 8px; 
+}
+.item-kuantitas {
+    width: 60px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* Tombol Hapus Item */
+.btn-remove-item {
+    background-color: #dc3545; /* Merah */
+    color: white;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+.btn-remove-item:hover {
+    background-color: #c82333;
+}
+
+/* Tombol Tambah Produk */
+.btn-tambah-produk {
+    background-color: var(--color-secondary); /* Emas */
+    color: var(--color-primary); /* Teks Coklat Tua */
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    font-size: 0.95rem;
+}
+.btn-tambah-produk:hover {
+    background-color: #ffc107;
+}
+
+/* Total Harga Display */
+.total-divider {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 20px 0;
+}
+.total-harga-display {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+.total-amount {
+    color: #E60023; /* Merah untuk total harga */
+    font-weight: 700;
+}
+
+/* Tombol Submit Utama */
+.form-submit-row {
+    text-align: center;
+    padding: 20px 0;
+}
+.btn-simpan-perubahan {
+    background-color: #28a745; /* Hijau */
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.btn-simpan-perubahan:hover {
+    background-color: #218838;
+}
+
+/* Responsif */
+@media (max-width: 992px) {
+    .form-grid-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ================================== */
+/* STYLING MANAJEMEN PRODUK */
+/* ================================== */
+
+/* Tombol Tambah Produk */
+.btn-tambah {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #4CAF50; /* Hijau */
+    color: white;
+    padding: 10px 15px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: 20px;
+    transition: background-color 0.2s;
+}
+.btn-tambah:hover {
+    background-color: #45a049;
+}
+
+/* Konsistensi Tabel */
+.order-table th, 
+.order-table td {
+    padding: 12px 15px;
+    /* Garis vertikal tipis tetap ada dari pesanan */
+}
+
+/* 1. STATUS BADGE (Aktif/Non-Aktif) */
+.status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 60px;
+}
+
+.status-badge.status-aktif {
+    background-color: #e8f5e9; /* Hijau Muda */
+    color: #2e7d32; /* Hijau Tua */
+    border: 1px solid #a5d6a7;
+}
+
+.status-badge.status-nonaktif {
+    background-color: #fce4ec; /* Merah Muda Sangat Muda */
+    color: #c2185b; /* Merah Marun */
+    border: 1px solid #f8bbd0;
+}
+
+/* 2. IKON AKSI (btn-action, btn-edit, btn-delete) */
+/* Pastikan CSS ini sudah ada dari Manajemen Pesanan, jika belum, tambahkan: */
+
+.action-cell {
+    white-space: nowrap;
+    text-align: center;
+}
+
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    margin: 0 3px;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.btn-edit {
+    color: var(--color-secondary); /* Emas */
+    background-color: rgba(218, 165, 32, 0.1);
+}
+.btn-edit:hover {
+    background-color: rgba(218, 165, 32, 0.3);
+}
+
+.btn-delete {
+    color: #dc3545; /* Merah */
+    background-color: rgba(220, 53, 69, 0.1);
+    border: none;
+    cursor: pointer;
+}
+.btn-delete:hover {
+    background-color: rgba(220, 53, 69, 0.3);
+}
+
+/* 3. Kontrol Pencarian (Memastikan rapi) */
+.search-only-control {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.search-only-control .search-form-control {
+    gap: 10px;
+}
+
+/* ================================== */
+/* FILE UPLOAD STYLING (Tampilan Bersih) */
+/* ================================== */
+
+.file-upload-group {
+    border: 1px dashed #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 30px;
+    /* Display flex untuk menata label dan teks */
+    display: flex; 
+    flex-direction: column;
+}
+
+/* 1. Sembunyikan Input File Bawaan */
+.file-upload-group input[type="file"] {
+    position: absolute; /* PENTING: Sembunyikan tapi tetap fungsional */
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    z-index: -1;
+}
+
+/* 2. Style Label agar terlihat seperti Tombol ('Pilih File Baru') */
+.file-upload-group label[for="gambar_file"] {
+    display: inline-block;
+    background: var(--color-secondary); /* Warna Emas */
+    color: var(--color-primary);
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    width: fit-content; /* Sesuai lebar konten */
+    margin-right: 15px;
+    transition: background-color 0.2s;
+}
+
+.file-upload-group label[for="gambar_file"]:hover {
+    background: #ffc107;
+}
+
+/* 3. Menata Teks Status File yang Dipilih */
+.file-status-text {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-top: 10px;
+    display: block;
+}
+
+/* 4. Menata Ikon pada Label */
+.file-upload-group label[for="gambar_file"]::before {
+    content: '\f0ee'; /* Ikon File */
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    margin-right: 8px;
+}
+
+.form-help-text {
+    margin-top: 10px;
+}

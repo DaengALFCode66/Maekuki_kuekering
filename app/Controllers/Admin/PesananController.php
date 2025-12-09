@@ -26,16 +26,27 @@ class PesananController extends BaseController
     {
         // Tangkap input dari URL (GET Request)
         $searchQuery = $this->request->getGet('search');
-        $sortStatus = $this->request->getGet('sort');
 
-        // Teruskan input ke Model
-        $data['pesanan'] = $this->pesananModel->getAllPesananDetail($searchQuery, $sortStatus);
+        // 1. Filter Status (diganti namanya dari 'sort' menjadi 'filter_status' di URL)
+        $filterStatus = $this->request->getGet('filter_status');
 
-        // Kirim kembali nilai yang dicari/diurutkan ke View untuk mengisi form
+        // 2. Sorting Harga (menggunakan 'sort' di URL, seperti yang dibuat di link header tabel)
+        $sortOrder = $this->request->getGet('sort');
+
+        // --- KUNCI: Pemanggilan Model Diperbarui ---
+        // Model harus diupdate agar menerima parameter sorting harga ($sortOrder)
+        $data['pesanan'] = $this->pesananModel->getAllPesananDetail(
+            $searchQuery,
+            $filterStatus, // Parameter 2: Filter Status
+            $sortOrder     // Parameter 3: Sorting Harga (BARU)
+        );
+
+        // Kirim kembali nilai yang dicari/diurutkan ke View
         $data['searchQuery'] = $searchQuery;
-        $data['sortStatus'] = $sortStatus;
-        
-        // Daftar Status yang Tersedia (untuk dropdown di View)
+        $data['sortStatus'] = $filterStatus; // Kirim nilai filter status kembali ke View
+        $data['sortOrder'] = $sortOrder;     // Kirim nilai sort harga kembali ke View
+
+        // Daftar Status yang Tersedia (untuk dropdown/data di View)
         $data['statusOptions'] = [
             'proses' => 'Proses',
             'batal' => 'Batal',

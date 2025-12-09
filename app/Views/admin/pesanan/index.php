@@ -1,25 +1,42 @@
 <?= $this->extend('admin/layout') ?>
 
 <?= $this->section('content') ?>
-<h1>Manajemen Pesanan</h1>
+<?php
+// Tentukan arah sort saat ini dari URL (Controller seharusnya menyediakan $sortOrder)
+$currentSort = $sortOrder ?? 'normal';
+$nextSort = 'asc'; // Default berikutnya adalah Termurah
+$sortIcon = '';
 
-<div style="margin-bottom: 20px; display: flex; gap: 15px; align-items: center;">
-    <form action="<?= base_url('admin/pesanan') ?>" method="get" style="display: flex; gap: 10px;">
+if ($currentSort === 'asc') {
+    $nextSort = 'desc'; // Jika saat ini ASC, berikutnya DESC (Termahal)
+    $sortIcon = '<i class="fas fa-sort-up ml-1"></i>'; // Ikon panah ke atas
+} elseif ($currentSort === 'desc') {
+    $nextSort = 'normal'; // Jika saat ini DESC, berikutnya Normal
+    $sortIcon = '<i class="fas fa-sort-down ml-1"></i>'; // Ikon panah ke bawah
+}
+
+// URL dasar untuk sorting harga, sambil mempertahankan parameter pencarian
+$sortUrl = base_url('admin/pesanan') . '?search=' . esc($searchQuery ?? '');
+?>
+<h1 class="dashboard-title">Manajemen Pesanan</h1>
+
+<div class="pesanan-controls">
+
+    <form action="<?= base_url('admin/pesanan') ?>" method="get" class="search-form-control">
         <input type="text" name="search" placeholder="Cari berdasarkan nama pelanggan..."
-            value="<?= esc($searchQuery ?? '') ?>"
-            style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 300px;">
-
-        <button type="submit" style="background-color: #8B4513; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
-            Cari
-        </button>
-        <a href="<?= base_url('admin/pesanan') ?>" style="text-decoration: none; padding: 8px 15px; border: 1px solid #ccc; border-radius: 4px; color: #333;">Reset</a>
+            value="<?= esc($searchQuery ?? '') ?>" class="input-search-pesanan">
+        <button type="submit" class="btn-cari"><i class="fas fa-search"></i> Cari</button>
+        <a href="<?= base_url('admin/pesanan') ?>" class="btn-reset"><i class="fas fa-redo-alt"></i> Reset</a>
     </form>
 
-    <form action="<?= base_url('admin/pesanan') ?>" method="get" style="display: flex; gap: 10px;">
+    <form action="<?= base_url('admin/pesanan') ?>" method="get" class="filter-form-control">
         <input type="hidden" name="search" value="<?= esc($searchQuery ?? '') ?>">
 
-        <label for="sort-status" style="font-weight: bold;">Filter Status:</label>
-        <select name="sort" onchange="this.form.submit()" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+        <input type="hidden" name="sort" value="<?= esc($sortOrder ?? '') ?>">
+
+        <label for="sort-status" class="label-filter">Filter Status:</label>
+
+        <select name="filter_status" onchange="this.form.submit()" class="select-status-filter">
             <option value="">-- Tampilkan Semua --</option>
             <?php foreach (['proses', 'selesai', 'batal'] as $statusKey): ?>
                 <option value="<?= $statusKey ?>"
@@ -31,93 +48,106 @@
     </form>
 </div>
 
-<div class="content-body">
+<div class="content-table-wrapper">
     <?php if (empty($pesanan)): ?>
-        <p>Belum ada pesanan terdaftar.</p>
+        <div class="alert alert-info">
+            <p><i class="fas fa-info-circle"></i> Belum ada pesanan terdaftar.</p>
+        </div>
     <?php else: ?>
-        <table style="width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.95rem;">
+        <table class="order-table">
             <thead>
-                <tr style="background-color: #f2f2f2;">
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">No</th>
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Pelanggan</th>
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Telepon / Alamat</th>
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Detail Pesanan</th>
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: right;">Total Harga</th>
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Status</th>
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Tgl. Pesanan</th>
-                    <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Aksi</th>
+                <tr>
+                    <th style="width: 30px; text-align: center;">No</th>
+                    <th style="width: 200px;">Pelanggan & Telepon</th>
+                    <th>Alamat</th>
+                    <th style="width: 250px;">Detail Pesanan</th>
+                    <th style="width: 100px; text-align: right;" class="sortable-header">
+                        <a href="<?= $sortUrl ?>&sort=<?= $nextSort ?>" class="sort-link" title="Urutkan Harga">
+                            Total Harga
+                            <?php if ($currentSort !== 'normal'): ?>
+                                <?= $sortIcon ?>
+                            <?php endif; ?>
+                        </a>
+                    </th>
+                    <th style="width: 80px; text-align: center;">Status</th>
+                    <th style="width: 110px; text-align: center;">Tgl. Pesanan</th>
+                    <th style="width: 80px; text-align: center;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <?php $no = 1; ?>
                 <?php foreach ($pesanan as $item): ?>
                     <tr>
-                        <td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><?= $no++ ?></td>
+                        <td style="text-align: center;"><?= $no++ ?></td>
 
-                        <td style="padding: 10px; border: 1px solid #ddd;">
-
-                            <a href="<?= base_url('admin/pesanan/' . $item['id'] . '/edit') ?>" style="color: #8B4513; text-decoration: none;">
-                                <strong><?= esc($item['nama']) ?></strong>
-                            </a>
-
+                        <td class="customer-info-cell">
+                            <strong><?= esc($item['nama']) ?></strong>
+                            <br><small class="text-telp">Telp: <?= esc($item['no_telepon']) ?></small>
                         </td>
 
-                        <td style="padding: 10px; border: 1px solid #ddd; font-size: 0.85rem;">
-                            Telp: <?= esc($item['no_telepon']) ?><br>
-                            Alamat: <?= esc($item['alamat_pengiriman']) ?>
+                        <td><?= esc($item['alamat_pengiriman']) ?></td>
+
+                        <td class="detail-pesanan-cell">
+                            <ul class="order-details-list">
+                                <?php
+                                $namaProduk = explode('|||', $item['nama_produk_list']);
+                                $kuantitas = explode('|||', $item['kuantitas_list']);
+                                for ($i = 0; $i < count($namaProduk); $i++) {
+                                    echo "<li><span class='qty-colored'>" . esc($kuantitas[$i]) . "x</span> <strong>" . esc($namaProduk[$i]) . "</strong></li>";
+                                }
+                                ?>
+                            </ul>
                         </td>
 
-                        <td style="padding: 10px; border: 1px solid #ddd;">
-                            <?php
-                            // Pisahkan nama produk dan kuantitas
-                            $namaProduk = explode('|||', $item['nama_produk_list']);
-                            $kuantitas = explode('|||', $item['kuantitas_list']);
-
-                            echo "<ul>";
-                            for ($i = 0; $i < count($namaProduk); $i++) {
-                                echo "<li>" . esc($kuantitas[$i]) . "x " . esc($namaProduk[$i]) . "</li>";
-                            }
-                            echo "</ul>";
-                            ?>
+                        <td style="text-align: right;">
+                            <strong class="total-harga-amount">Rp <?= number_format($item['total_harga'], 0, ',', '.') ?></strong>
                         </td>
 
-                        <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">
-                            <strong>Rp <?= number_format($item['total_harga'], 2, ',', '.') ?></strong>
-                        </td>
-
-                        <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">
+                        <td class="status-cell">
                             <form action="<?= base_url('admin/pesanan/update/' . $item['id']) ?>" method="post">
                                 <?= csrf_field() ?>
-                                <select name="status_baru" onchange="this.form.submit()" style="padding: 5px; border-radius: 4px;">
-                                    <?php foreach ($statusOptions as $key => $label): ?>
-                                        <option value="<?= $key ?>" <?= ($item['status'] === $key) ? 'selected' : '' ?>>
-                                            <?= ucfirst($label) ?>
+
+                                <select name="status_baru" onchange="this.form.submit()" class="status-select status-<?= esc($item['status']) ?>">
+                                    <?php
+                                    // Definisikan label yang akan terlihat di dropdown
+                                    $statusOptions = [
+                                        'proses' => 'Proses',
+                                        'batal' => 'Batal',
+                                        'selesai' => 'Selesai',
+                                    ];
+                                    foreach ($statusOptions as $key => $label): ?>
+                                        <option value="<?= $key ?>"
+                                            <?= ($item['status'] === $key) ? 'selected' : '' ?>
+                                            class="option-<?= $key ?>"> <?= ucfirst($label) ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
                             </form>
                         </td>
 
-                        <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">
-                            <?= date('d M Y H:i', strtotime($item['tanggal_pesanan'])) ?>
+                        <td class="tgl-pesanan-cell">
+                            <?php
+                            $dateTime = strtotime($item['tanggal_pesanan']);
+                            $datePart = date('d-m-Y', $dateTime);
+                            $timePart = date('H:i', $dateTime);
+                            ?>
+                            <span class="date-display"><?= $datePart ?></span>
+                            <span class="time-display"><?= $timePart ?> WIB</span>
                         </td>
 
-                        <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">
-
-                            <a href="<?= base_url('admin/pesanan/' . $item['id'] . '/edit') ?>"
-                                style="color: blue; text-decoration: none; margin-right: 8px;">
-                                Edit
+                        <td class="action-cell">
+                            <a href="<?= base_url('admin/pesanan/' . $item['id'] . '/edit') ?>" class="btn-action btn-edit" title="Edit Pesanan">
+                                <i class="fas fa-edit"></i>
                             </a>
 
-                            <form action="<?= base_url('admin/pesanan/' . $item['id']) ?>" method="post" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus pesanan #<?= esc($item['id']) ?>? Ini akan menghapus semua detail.');">
+                            <form action="<?= base_url('admin/pesanan/' . $item['id']) ?>" method="post" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus pesanan #<?= esc($item['id']) ?>?');">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <?= csrf_field() ?>
-                                <button type="submit" style="color: red; background: none; border: none; cursor: pointer;">
-                                    Hapus
+                                <button type="submit" class="btn-action btn-delete" title="Hapus Pesanan">
+                                    <i class="fas fa-trash-alt"></i>
                                 </button>
                             </form>
                         </td>
-
                     </tr>
                 <?php endforeach; ?>
             </tbody>

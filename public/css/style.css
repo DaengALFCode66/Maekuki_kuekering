@@ -1230,3 +1230,73 @@ a {
         border-bottom: 1px solid #eee;
     }
 }
+
+/* ================================== */
+/* STYLING FITUR SEARCH DI KATALOG */
+/* ================================== */
+
+.search-container {
+    /* Rata Tengah Container Search */
+    display: flex;
+    justify-content: center;
+    margin: 30px auto 40px; /* Jarak bawah yang lebar sebelum grid produk */
+    width: 100%;
+    max-width: 600px; /* Batasi lebar maksimal agar tidak terlalu besar */
+}
+
+#search-form {
+    display: flex;
+    width: 100%;
+    border: 2px solid var(--color-primary); /* Border Coklat Tua */
+    border-radius: 30px; /* Bentuk Pill */
+    overflow: hidden;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+#search-form:focus-within {
+    box-shadow: 0 4px 12px rgba(218, 165, 32, 0.5); /* Efek fokus Emas */
+    border-color: var(--color-secondary);
+}
+
+/* Input Field */
+#search-input {
+    flex-grow: 1;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1rem;
+    color: var(--color-text-dark);
+    outline: none;
+    background: transparent;
+}
+
+/* Tombol Search (Ikon) */
+.search-btn {
+    background-color: var(--color-primary); /* Background Coklat Tua */
+    color: white;
+    border: none;
+    padding: 0 15px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease;
+    flex-shrink: 0;
+}
+
+.search-btn:hover {
+    background-color: #6a350e; /* Coklat yang sedikit lebih gelap saat hover */
+}
+
+/* Responsif untuk Mobile */
+@media (max-width: 600px) {
+    .search-container {
+        max-width: 90%;
+        margin: 20px auto 30px;
+    }
+    #search-input {
+        padding: 10px 15px;
+    }
+    .search-btn {
+        padding: 0 12px;
+    }
+}
