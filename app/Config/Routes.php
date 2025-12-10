@@ -26,10 +26,14 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
 
     // Manajemen Pesanan
     $routes->get('pesanan', 'PesananController::index');
+    $routes->post('pesanan/update_status/(:num)', 'PesananController::updateStatus/$1');
+
+     // RUTE BARU: Menampilkan halaman Edit Pesanan
+    $routes->get('pesanan/(:num)/edit', 'PesananController::edit/$1');
+
     $routes->post('pesanan/update/(:num)', 'PesananController::update/$1'); // Untuk update status
 
-    // RUTE BARU: Menampilkan halaman Edit Pesanan
-    $routes->get('pesanan/(:num)/edit', 'PesananController::edit/$1');
+   
 
     // RUTE BARU: DELETE PESANAN
     $routes->delete('pesanan/(:num)', 'PesananController::delete/$1'); // <-- TAMB

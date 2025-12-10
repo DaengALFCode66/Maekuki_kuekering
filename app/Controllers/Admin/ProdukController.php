@@ -26,17 +26,20 @@ class ProdukController extends BaseController
     // LIST SEMUA PRODUK (URL: /admin/produk)
     public function index()
     {
-        // 1. Tangkap input dari URL (GET Request)
-        $searchQuery = $this->request->getGet('search');
+    // 1. Ambil query pencarian dan sorting
+    $search = $this->request->getGet('search');
+    $sortOrder = $this->request->getGet('sort') ?? 'normal'; // Tangkap parameter 'sort'
 
-        // 2. Ambil data produk, menerapkan filter pencarian
-        // Catatan: getProdukBySearch sudah join dengan tabel stok
-        $data['produk'] = $this->produkModel->getProdukBySearch($searchQuery);
+    // 2. Panggil Model dengan parameter yang lengkap
+    $produkData = $this->produkModel->getProdukBySearch($search, $sortOrder);
 
-        // 3. Kirim kembali nilai yang dicari ke View untuk mengisi form
-        $data['searchQuery'] = $searchQuery;
+    // 3. Kirim data ke view
+    $data = [
+        'produk' => $produkData,
+        'searchQuery' => $search,
+    ];
 
-        return view('admin/produk/index', $data);
+    return view('admin/produk/index', $data);
     }
 
     // BUAT PRODUK BARU (URL: /admin/produk/new)

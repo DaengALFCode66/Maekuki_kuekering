@@ -7,7 +7,7 @@ use App\Models\PesananModel;
 use App\Models\ProdukModel; // <-- TAMBAHKAN INI
 use App\Models\UserModel;   // <-- TA
 
-class PesananController extends BaseController
+class pesananController extends BaseController
 {
     protected $pesananModel;
 
@@ -136,6 +136,37 @@ class PesananController extends BaseController
         }
 
         return view('admin/pesanan/edit', $data);
+    }
+
+    public function updateStatus($id = null)
+    {
+        // Pastikan hanya POST request yang diterima
+        if (!$this->request->is('post') || is_null($id)) {
+            return redirect()->back();
+        }
+
+        // Ambil nilai status dari input form (yang diberi nama 'status_baru' di view index)
+        $statusBaru = $this->request->getPost('status_baru');
+        
+        if (is_null($statusBaru)) {
+            return redirect()->back()->with('error', 'Status baru tidak ditemukan dalam permintaan.');
+        }
+
+        try {
+            // 1. Ambil data pesanan lama (Opsional, untuk validasi)
+            // $pesananLama = $this->pesananModel->find($id);
+
+            // 2. Lakukan update status saja
+            $this->pesananModel->update($id, [
+                'status' => $statusBaru,
+            ]);
+
+            return redirect()->to('/admin/pesanan')->with('success', 'Status pesanan #' . $id . ' berhasil diubah menjadi ' . ucfirst($statusBaru) . '.');
+
+        } catch (\Exception $e) {
+            // Tangani error database
+            return redirect()->back()->with('error', 'Gagal update status: ' . $e->getMessage());
+        }
     }
 
     // app/Controllers/Admin/PesananController.php (Tambahkan fungsi ini)

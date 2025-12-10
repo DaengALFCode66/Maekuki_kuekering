@@ -948,6 +948,7 @@
     background-color: var(--color-primary);
     color: white;
     font-weight: 600;
+    text-align: center !important;
 }
 
 /* Hapus Garis Batas pada Kolom Terakhir */
@@ -1006,6 +1007,7 @@
 .order-table .status-cell {
     padding-top: 8px;
     padding-bottom: 8px;
+    text-align: center;
 }
 
 /* ================================== */
@@ -1018,12 +1020,13 @@
     position: relative;
     /* Hilangkan background bawaan hover di TH agar link terlihat jelas */
     transition: background-color 0.2s;
+    
 }
 
 /* Link Sort */
 .sortable-header .sort-link {
     display: flex;
-    justify-content: flex-end; /* Posisikan ke kanan (sesuai alignment harga) */
+    justify-content:space-around; /* Posisikan ke kanan (sesuai alignment harga) */
     align-items: center;
     color: white;
     text-decoration: none;

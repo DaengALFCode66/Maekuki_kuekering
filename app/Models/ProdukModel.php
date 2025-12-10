@@ -25,7 +25,7 @@ class ProdukModel extends Model
     }
     // app/Models/ProdukModel.php (Tambahkan method ini di dalam class ProdukModel)
 
-    public function getProdukBySearch($search = null)
+    public function getProdukBySearch($search = null,$sortOrder = 'normal')
     {
         $builder = $this->builder(); // Membangun query dari model
 
@@ -37,6 +37,17 @@ class ProdukModel extends Model
         // Gabungkan dengan data Stok (untuk kolom yang kita tampilkan di tabel)
         $builder->select('produk.*, stok.jumlah_stok')
             ->join('stok', 'stok.id_produk = produk.id', 'left'); // LEFT JOIN agar produk tanpa stok tetap tampil
+
+        if ($sortOrder === 'stok_asc') {
+        // Stok terendah ke tertinggi
+        $builder->orderBy('stok.jumlah_stok', 'ASC'); 
+    } elseif ($sortOrder === 'stok_desc') {
+        // Stok tertinggi ke terendah
+        $builder->orderBy('stok.jumlah_stok', 'DESC'); 
+    } else {
+        // Urutan default: Berdasarkan ID Produk Terbaru
+        $builder->orderBy('produk.id', 'DESC');
+    }
 
         // Urutkan berdasarkan ID terbaru
         $builder->orderBy('produk.id', 'ASC');

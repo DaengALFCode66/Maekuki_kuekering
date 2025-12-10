@@ -99,13 +99,13 @@ $sortUrl = base_url('admin/pesanan') . '?search=' . esc($searchQuery ?? '');
                             </ul>
                         </td>
 
-                        <td style="text-align: right;">
+                        <td>
                             <strong class="total-harga-amount">Rp <?= number_format($item['total_harga'], 0, ',', '.') ?></strong>
                         </td>
 
                         <td class="status-cell">
-                            <form action="<?= base_url('admin/pesanan/update/' . $item['id']) ?>" method="post">
-                                <?= csrf_field() ?>
+                            <form action="<?= base_url('admin/pesanan/update_status/' . $item['id']) ?>" method="post">
+                            <?= csrf_field() ?>
 
                                 <select name="status_baru" onchange="this.form.submit()" class="status-select status-<?= esc($item['status']) ?>">
                                     <?php
