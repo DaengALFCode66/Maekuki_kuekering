@@ -15,7 +15,7 @@ class PesananModel extends Model
      * Mengambil semua pesanan dengan detail pengguna, produk, dan kuantitas.
      * Menggunakan JOIN untuk menggabungkan data dari 4 tabel.
      */
-    public function getAllPesananDetail($search = null, $filterStatus = null, $sortOrder = 'normal')
+    public function getAllPesananDetail($search = null, $filterStatus = null, $sortOrder = 'normal', $limit = null, $startDate = null, $endDate = null)
     {
         $builder = $this->db->table('pesanan');
         $builder->select('
@@ -28,8 +28,18 @@ class PesananModel extends Model
         ');
         $builder->join('user', 'user.id = pesanan.id_user');
         $builder->join('detail_pesanan', 'detail_pesanan.id_pesanan = pesanan.id');
-        $builder->join('produk', 'produk.id = detail_pesanan.id_produk');
+        $builder->join('produk', 'produk.id = detail_pesanan.id_produk', 'left');
 
+        // 🔑 KUNCI PERBAIKAN: LOGIKA FILTER TANGGAL HARI INI
+        if ($startDate) {
+            // Filter tanggal lebih besar atau sama dengan (>=) tanggal mulai (00:00:00)
+            $builder->where('pesanan.tanggal_pesanan >=', $startDate);
+        }
+        if ($endDate) {
+            // Filter tanggal lebih kecil atau sama dengan (<=) tanggal akhir (23:59:59)
+            $builder->where('pesanan.tanggal_pesanan <=', $endDate);
+        }
+        
         // --- FILTERING ---
         if ($search) {
             $builder->like('user.nama', $search);

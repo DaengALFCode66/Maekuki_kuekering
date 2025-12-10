@@ -1451,3 +1451,209 @@
 .form-help-text {
     margin-top: 10px;
 }
+
+/* ================================== */
+/* DASHBOARD LAYOUT */
+/* ================================== */
+
+/* Variabel Warna Dasar (Asumsi sudah ada di file Anda) */
+:root {
+    /* Contoh warna utama yang sering digunakan di AdminLTE/Modern Design */
+    --color-primary: #8B4513; /* Saddle Brown / Coklat Tua */
+    --color-secondary: #FFD700; /* Gold / Emas */
+    --color-text-dark: #333;
+    --color-bg-light: #f8f9fa;
+}
+
+
+/* 1. QUICK STATS GRID (4 KARTU ATAS) */
+.quick-stats-grid {
+    display: grid;
+    /* Membuat kartu menyesuaikan lebar dan minimum 220px */
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.stat-value {
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+/* Pewarnaan Kartu Stat (Sesuai Desain Modern/Bootstrap) */
+.stat-card.stat-blue { 
+    border-left: 5px solid #007bff; 
+    background-color: #eaf6ff; /* Background Biru Muda */
+}
+.stat-card.stat-green { 
+    border-left: 5px solid #28a745; 
+    background-color: #e6ffec; /* Background Hijau Muda */
+}
+.stat-card.stat-orange { 
+    border-left: 5px solid #fd7e14; 
+    background-color: #fff8eb; /* Background Oranye Muda */
+}
+.stat-card.stat-yellow { 
+    border-left: 5px solid #ffc107; 
+    background-color: #fffde6; /* Background Kuning Muda */
+}
+
+/* 2. MAIN DASHBOARD GRID (TABEL DAN NOTIFIKASI) */
+.dashboard-bottom-grid {
+    /* Layout 2/3 untuk tabel dan 1/3 untuk notif */
+    display: grid;
+    grid-template-columns: 2fr 1fr; 
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.card-box {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    height: 100%; /* Agar tinggi kartu sama */
+}
+
+.card-title {
+    font-size: 1.2rem;
+    color: var(--color-primary);
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+.card-title i {
+    margin-right: 8px;
+}
+
+/* 3. TABEL PESANAN MINI */
+.simple-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+.simple-table th, .simple-table td {
+    padding: 10px 5px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+}
+.simple-table th {
+    font-weight: 600;
+    color: #6c757d;
+}
+
+/* List Produk dalam Tabel */
+.product-list-compact {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    line-height: 1.4;
+    font-size: 0.8rem;
+}
+.product-list-compact li {
+    padding-left: 5px; /* Sedikit indentasi */
+}
+
+/* Status Mini Badge */
+.status-mini {
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.status-mini.status-proses { background-color: #ffe0b2; color: #ef6c00; }
+.status-mini.status-selesai { background-color: #e8f5e9; color: #2e7d32; }
+.status-mini.status-batal { background-color: #ffcdd2; color: #c62828; }
+
+/* Card Footer */
+.card-footer {
+    text-align: right;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+.card-footer a {
+    color: var(--color-secondary);
+    text-decoration: none;
+}
+.card-footer a:hover {
+    text-decoration: underline;
+}
+
+/* 4. NOTIFIKASI PENTING */
+.notification-card {
+    /* Background Kuning Muda */
+    background-color: #fffaf0; 
+    border: 1px solid #fcd34d;
+}
+.notification-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.notification-list li {
+    padding: 8px 0;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+.notification-list i {
+    font-size: 1rem;
+    margin-top: 2px;
+}
+
+/* Warna Teks Notif */
+.text-red { color: #dc3545; }
+.text-green { color: #28a745; }
+.text-blue { color: #007bff; }
+.notif-warning { color: var(--color-primary); } /* Untuk stok rendah */
+
+
+/* ================================== */
+/* RESPONSIVITAS */
+/* ================================== */
+
+@media (max-width: 992px) {
+    /* Tablet/Medium Screens */
+    .dashboard-bottom-grid {
+        grid-template-columns: 1fr; /* Tumpuk tabel dan notif */
+    }
+}
+
+@media (max-width: 576px) {
+    /* Mobile Screens */
+    .quick-stats-grid {
+        /* Tumpuk kartu menjadi satu kolom */
+        grid-template-columns: 1fr; 
+    }
+    .stat-value {
+        font-size: 1.8rem;
+    }
+    .card-box {
+        padding: 15px;
+    }
+}
