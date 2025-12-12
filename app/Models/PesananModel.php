@@ -43,6 +43,7 @@ class PesananModel extends Model
         // --- FILTERING ---
         if ($search) {
             $builder->like('user.nama', $search);
+            $builder->orLike('user.no_telepon', $search); // Cari juga di no_telepon user
         }
 
         // KUNCI: FILTER STATUS (Mengganti nama parameter lama $sortBy menjadi $filterStatus)

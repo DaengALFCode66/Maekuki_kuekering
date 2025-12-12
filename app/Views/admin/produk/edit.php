@@ -34,23 +34,28 @@
             </select>
         </div>
 
-        <div class="image-preview-box">
+        <div class="form-group image-preview-box">
             <label for="gambar">Ganti Foto Produk:</label>
 
             <?php if (!empty($produk['url_gambar'])): ?>
                 <p style="margin-top: 5px;">Gambar Saat Ini (<?= esc($produk['url_gambar']) ?>):</p>
-                <img src="<?= base_url('assets/Asset/' . $produk['url_gambar']) ?>">
+                <img src="<?= base_url('assets/Asset/' . $produk['url_gambar']) ?>" id="gambar-lama-preview" class="current-image-preview">
                 <input type="hidden" name="gambar_lama" value="<?= esc($produk['url_gambar']) ?>">
             <?php endif; ?>
 
-            <div class="custom-file-upload">
-                <input type="file" id="gambar" name="gambar" accept="image/*" class="file-input-hidden">
+            <div id="new-image-preview-container" style="margin-top: 15px; margin-bottom: 15px; display: none; text-align: center;">
+                <p style="font-weight: 600; color: green;">Preview Gambar Baru:</p>
+                <img id="image-preview-edit" src="" alt="Preview Foto Baru" class="new-image-preview">
+            </div>
 
-                <label for="gambar" class="file-upload-label">
+            <div class="custom-file-upload-edit">
+                <input type="file" id="new_gambar_file" name="new_gambar" accept="image/*" class="file-input-hidden">
+
+                <label for="new_gambar_file" class="file-upload-label-edit" id="trigger-file-input-edit">
                     <i class="fas fa-upload"></i> Pilih File Baru
                 </label>
 
-                <span id="file-name-display" class="file-name-display">Belum ada file dipilih.</span>
+                <span id="file-name-display-edit" class="file-name-display">Belum ada file dipilih.</span>
             </div>
 
             <small style="color: #888; margin-top: 10px; display: block;">Biarkan kosong jika tidak ingin mengubah foto.</small>
@@ -64,4 +69,48 @@
         <button type="submit" class="btn-update-form">Update Produk</button>
     </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Target elemen yang baru diubah ID-nya
+        const fileInput = document.getElementById('new_gambar_file');
+        const fileNameDisplay = document.getElementById('file-name-display-edit');
+        const imagePreview = document.getElementById('image-preview-edit');
+        const previewContainer = document.getElementById('new-image-preview-container');
+
+        if (fileInput) {
+            fileInput.addEventListener('change', function() {
+                if (this.files && this.files.length > 0) {
+                    const file = this.files[0];
+                    const fileName = file.name;
+
+                    // A. Tampilkan Nama File
+                    fileNameDisplay.textContent = `File baru dipilih: ${fileName}`;
+                    fileNameDisplay.style.color = 'var(--color-primary)';
+                    fileNameDisplay.style.fontWeight = '600';
+
+                    // B. Tampilkan Preview Gambar
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        previewContainer.style.display = 'block'; // Tampilkan preview container
+
+                        // Opsional: Sembunyikan gambar lama (jika ingin)
+                        // const oldImage = document.getElementById('gambar-lama-preview');
+                        // if (oldImage) { oldImage.style.opacity = '0.5'; }
+                    };
+                    reader.readAsDataURL(file);
+
+                } else {
+                    // C. Reset jika file dibatalkan
+                    fileNameDisplay.textContent = 'Belum ada file dipilih.';
+                    fileNameDisplay.style.color = '#888';
+                    fileNameDisplay.style.fontWeight = 'normal';
+                    imagePreview.src = '';
+                    previewContainer.style.display = 'none';
+                }
+            });
+        }
+    });
+</script>
 <?= $this->endSection() ?>

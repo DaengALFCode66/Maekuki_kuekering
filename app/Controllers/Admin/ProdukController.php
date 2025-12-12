@@ -134,7 +134,7 @@ class ProdukController extends BaseController
 
     public function update($id = null)
     {
-        $fileGambar = $this->request->getFile('gambar');
+        $fileGambar = $this->request->getFile('new_gambar');
         $gambarLama = $this->request->getPost('gambar_lama');
 
         $data_update = [

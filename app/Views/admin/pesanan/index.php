@@ -23,7 +23,7 @@ $sortUrl = base_url('admin/pesanan') . '?search=' . esc($searchQuery ?? '');
 <div class="pesanan-controls">
 
     <form action="<?= base_url('admin/pesanan') ?>" method="get" class="search-form-control">
-        <input type="text" name="search" placeholder="Cari berdasarkan nama pelanggan..."
+        <input type="text" name="search" placeholder="Cari berdasarkan nama pelanggan/telepon..."
             value="<?= esc($searchQuery ?? '') ?>" class="input-search-pesanan">
         <button type="submit" class="btn-cari"><i class="fas fa-search"></i> Cari</button>
         <a href="<?= base_url('admin/pesanan') ?>" class="btn-reset"><i class="fas fa-redo-alt"></i> Reset</a>
