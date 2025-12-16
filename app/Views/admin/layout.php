@@ -39,6 +39,11 @@
                             <i class="fas fa-shopping-cart"></i> <span>Manajemen Pesanan</span>
                         </a>
                     </li>
+                    <li class="logout-sidebar-item">
+                        <a href="<?= base_url('admin/logout') ?>">
+                            <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </aside>
@@ -54,9 +59,7 @@
                 </button>
 
                 <h4 class="header-greeting">Selamat Datang, <strong><?= session()->get('email') ?></strong></h4>
-                <a href="<?= base_url('admin/logout') ?>" class="btn-logout">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
+               
             </header>
 
             <?php if (session()->getFlashdata('success')): ?>

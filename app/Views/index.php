@@ -273,9 +273,7 @@
             &copy; 2025 Maekuki. All Rights Reserved.
         </div>
 
-        <a href="https://wa.me/6281234567890" class="whatsapp-float" target="_blank">
-            <i class="fab fa-whatsapp"></i>
-        </a>
+        
     </footer>
 
     <div id="cart-modal" class="modal">

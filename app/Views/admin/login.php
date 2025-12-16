@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,15 +9,19 @@
     <style>
         /* Warna Branding Maekuki */
         :root {
-            --color-primary: #8B4513; /* Coklat Tua */
-            --color-secondary: #DAA520; /* Emas */
-            --color-light: #F5F5DC; /* Krem */
+            --color-primary: #8B4513;
+            /* Coklat Tua */
+            --color-secondary: #DAA520;
+            /* Emas */
+            --color-light: #F5F5DC;
+            /* Krem */
             --color-text-dark: #333;
         }
 
         body {
-            font-family: 'Poppins', sans-serif; /* Gunakan font Poppins yang Anda pakai di website */
-            background-color: var(--color-light); 
+            font-family: 'Poppins', sans-serif;
+            /* Gunakan font Poppins yang Anda pakai di website */
+            background-color: var(--color-light);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -27,11 +32,14 @@
         /* Container Login yang Diperbarui */
         .login-container {
             background-color: #fff;
-            padding: 40px; /* Padding lebih besar */
+            padding: 40px;
+            /* Padding lebih besar */
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Bayangan lebih halus */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            /* Bayangan lebih halus */
             width: 100%;
-            max-width: 400px; /* Lebar lebih besar */
+            max-width: 400px;
+            /* Lebar lebih besar */
             text-align: center;
         }
 
@@ -39,8 +47,10 @@
         .login-logo {
             margin-bottom: 25px;
         }
+
         .login-logo img {
-            width: 80px; /* Ukuran Logo */
+            width: 80px;
+            /* Ukuran Logo */
             height: auto;
         }
 
@@ -48,7 +58,7 @@
         .login-container h2 {
             font-size: 1.8rem;
             text-align: center;
-            color: var(--color-primary); 
+            color: var(--color-primary);
             margin-bottom: 30px;
             font-weight: 700;
         }
@@ -58,7 +68,7 @@
             margin-bottom: 20px;
             text-align: left;
         }
-        
+
         /* Label */
         .form-group label {
             display: block;
@@ -67,11 +77,12 @@
             color: var(--color-text-dark);
             font-size: 0.95rem;
         }
-        
+
         /* Ikon pada Label */
         .form-group label i {
             margin-right: 8px;
-            color: var(--color-secondary); /* Ikon Emas */
+            color: var(--color-secondary);
+            /* Ikon Emas */
         }
 
         /* Input Fields yang Diperbarui */
@@ -79,7 +90,8 @@
         .form-group input[type="password"] {
             width: 100%;
             padding: 10px 15px;
-            border: 1px solid #D6BC91; /* Border Coklat Muda */
+            border: 1px solid #D6BC91;
+            /* Border Coklat Muda */
             border-radius: 6px;
             box-sizing: border-box;
             font-size: 1rem;
@@ -89,7 +101,8 @@
         /* Efek Fokus Input */
         .form-group input:focus {
             border-color: var(--color-secondary);
-            box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.2); /* Bayangan Emas Muda */
+            box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.2);
+            /* Bayangan Emas Muda */
             outline: none;
         }
 
@@ -97,7 +110,8 @@
         .btn-login {
             width: 100%;
             padding: 12px;
-            background-color: var(--color-primary); /* Coklat Tua */
+            background-color: var(--color-primary);
+            /* Coklat Tua */
             color: white;
             border: none;
             border-radius: 8px;
@@ -108,10 +122,12 @@
             letter-spacing: 0.5px;
             transition: background-color 0.3s;
         }
+
         .btn-login:hover {
-            background-color: #6a350e; /* Coklat yang sedikit lebih gelap */
+            background-color: #6a350e;
+            /* Coklat yang sedikit lebih gelap */
         }
-        
+
         /* Styling Alert (Tetap) */
         .alert {
             padding: 10px;
@@ -124,10 +140,11 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="login-container">
-        
+
         <div class="login-logo">
             <img src="<?= base_url('assets/Asset/maekukilogo.png') ?>" alt="Maekuki Logo">
         </div>
@@ -141,7 +158,9 @@
         <?php endif; ?>
 
         <form action="<?= base_url('admin/login') ?>" method="post">
-            
+
+            <?= csrf_field() ?>
+
             <div class="form-group">
                 <label for="email"><i class="fas fa-envelope"></i> Email</label>
                 <input type="email" id="email" name="email" value="<?= old('email') ?>" required>
@@ -157,4 +176,5 @@
     </div>
 
 </body>
+
 </html>

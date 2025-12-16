@@ -1561,3 +1561,191 @@ html {
   /* KUNCI SMOOTH SCROLLING: Menambahkan animasi gulir halus */
   scroll-behavior: smooth;
 }
+
+/* style.css - Perbaikan Mobile/Responsive */
+
+/* A. Pastikan Body dan HTML Tidak Melebihi Batas Viewport */
+html, body {
+    width: 100%;
+    /* Pastikan tidak ada scroll horizontal */
+}
+
+/* B. Perbaiki Box Sizing (Sangat Disarankan) */
+/* Ini memastikan padding dan border dihitung ke dalam lebar elemen */
+*, *::before, *::after {
+    box-sizing: border-box; 
+}
+
+/* C. Periksa Elemen yang Terlalu Lebar */
+/* Header Navbar - Seringkali margin/padding header/logo menyebabkan overflow */
+.navbar .container {
+    padding: 0 15px; /* Sesuaikan padding agar tidak terlalu lebar di mobile */
+    max-width: 100%;
+}
+
+/* Hero Section / Banner */
+.hero-section {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+/* Keunggulan Kami Wrapper/Grid (Jika ada margin/gap besar) */
+.keunggulan-wrapper {
+    overflow: hidden; /* Menyembunyikan overflow pada grid internal */
+}
+
+/* D. Perbaikan Footer */
+.main-footer {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* style.css - Perbaikan Dasar Parcel Section */
+
+/* Pastikan container parcel menggunakan padding yang responsif */
+.parcel-container {
+    display: flex;
+    flex-wrap: wrap; /* Memastikan kolom bertumpuk di mobile */
+    align-items: center;
+    gap: 30px;
+    padding: 20px; /* Tambahkan padding agar tidak menempel di tepi */
+}
+
+/* Container Gambar Parcel */
+.parcel-image-container {
+    /* Di desktop, ini akan mengambil sebagian lebar */
+    flex-basis: 40%; 
+    text-align: center;
+}
+
+.parcel-image-container img {
+    /* KUNCI: Membuat gambar responsif */
+    max-width: 100%; 
+    height: auto;
+    display: block; /* Hapus spasi di bawah gambar */
+    margin: 0 auto; /* Ratakan gambar ke tengah di dalam container-nya */
+}
+
+/* Detail Parcel (Teks di samping) */
+.parcel-detail {
+    flex-basis: 50%; /* Di desktop, ambil sisa lebar */
+}
+
+/* style.css - Media Query untuk Mobile */
+
+@media (max-width: 768px) {
+    /* Pada mobile, tumpuk elemen secara vertikal */
+    .parcel-container {
+        flex-direction: column; 
+    }
+    
+    /* Gambar Parcel mengambil lebar penuh dan merata tengah */
+    .parcel-image-container {
+        flex-basis: 100%;
+        width: 100%;
+        text-align: center; /* Pastikan gambar berada di tengah */
+        margin-bottom: 20px;
+    }
+    
+    /* Pastikan gambar di dalamnya responsif dan terpusat */
+    .parcel-image-container img {
+        max-width: 90%; /* Boleh lebih kecil sedikit dari 100% untuk padding visual */
+        height: auto;
+        margin: 0 auto;
+    }
+
+    .parcel-detail {
+        flex-basis: 100%;
+    }
+}
+
+/* style.css - di dalam @media (max-width: 768px) */
+@media (max-width: 768px) {
+    /* Navbar dan Logo */
+    .navbar .container {
+        padding: 10px 15px; /* Kurangi padding vertikal */
+    }
+    .logo img {
+        width: 35px; /* Kecilkan ukuran logo */
+        height: 35px;
+    }
+    .logo h1 .brand-name {
+        font-size: 1.1rem; /* Kecilkan teks utama */
+    }
+    .logo h1 .brand-name2 {
+        font-size: 0.7rem; /* Kecilkan sub-teks */
+    }
+
+    /* Ikon Keranjang */
+    .cart-icon a {
+        font-size: 1.2rem;
+    }
+    .cart-count {
+        font-size: 0.7rem;
+        padding: 2px 5px;
+    }
+}
+
+/* style.css - di dalam @media (max-width: 768px) */
+@media (max-width: 768px) {
+    /* ... (kode sebelumnya) ... */
+
+    .judul-keunggulan {
+        font-size: 1.5rem;
+    }
+    .keunggulan-item {
+        padding: 15px 0;
+        text-align: center; /* Ratakan konten keunggulan di tengah */
+    }
+    .keunggulan-icon {
+        font-size: 3rem !important; /* Kecilkan ikon (dari 4x menjadi 3x) */
+        margin-bottom: 10px;
+    }
+    .keunggulan-title {
+        font-size: 1.1rem;
+    }
+    .keunggulan-desc {
+        font-size: 0.85rem;
+    }
+}
+
+/* style.css - di dalam @media (max-width: 768px) */
+@media (max-width: 768px) {
+    /* ... (kode sebelumnya) ... */
+
+    /* Parcel Detail */
+    .parcel-title {
+        font-size: 1.6rem;
+    }
+    .parcel-description {
+        font-size: 0.9rem;
+    }
+
+    /* List Keunggulan (Ikon dan Teks Sejajar) */
+    .benefit-list {
+        padding-left: 0;
+    }
+    .benefit-list li {
+        font-size: 0.9rem;
+        display: flex; /* Kunci: Menggunakan flexbox untuk ikon dan teks */
+        align-items: flex-start;
+        gap: 8px; /* Jarak antara ikon dan teks */
+        margin-bottom: 8px;
+    }
+    .benefit-list i {
+        font-size: 1rem;
+        margin-top: 3px; /* Penyesuaian vertikal ikon */
+        flex-shrink: 0; /* Cegah ikon menyusut */
+    }
+
+    /* Tombol Konsultasi (Perkecil) */
+    .btn-hubungi-admin {
+        padding: 10px 20px; /* Perkecil padding tombol */
+        font-size: 0.7rem;
+        width: 80%; /* Buat tombol agak lebar tapi tidak penuh */
+        margin: 20px auto 0;
+        display: block; /* Agar margin auto berfungsi */
+        text-align: center;
+    }
+}
