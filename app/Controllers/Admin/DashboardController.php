@@ -32,9 +32,9 @@ class DashboardController extends BaseController
         $endOfDay = date('Y-m-d 23:59:59');
         $startOfMonth = date('Y-m-01 00:00:00');
         $endOfMonth = date('Y-m-t 23:59:59'); // Hari terakhir bulan ini
-        
+
         // --- 1. METRIK CEPAT (QUICK STATS) ---
-        
+
         // A. Total Produk Aktif
         $totalProdukAktif = $this->produkModel->where('status', 'aktif')->countAllResults();
 
@@ -62,23 +62,25 @@ class DashboardController extends BaseController
 
         // E. Pesanan Hari Ini (Menggunakan method JOIN/GROUP_CONCAT)
         $pesananHariIni = $this->pesananModel->getAllPesananDetail(
-            $search = null, 
-            $filterStatus = null, 
-            $sortOrder = 'normal', 
+            $search = null,
+            $filterStatus = null,
+            $sortOrder = 'normal',
             $limit = 10,
-            $startDate = $startOfDay, 
+            $startDate = $startOfDay,
             $endDate = $endOfDay
-        ); 
+        );
 
-        // F. Notifikasi Stok Rendah (Produk dengan jumlah_stok < 5)
-        $stokRendah = $this->stokModel
+        $stokKritis = $this->stokModel
             ->select('produk.nama, stok.jumlah_stok')
             ->join('produk', 'produk.id = stok.id_produk')
-            ->where('stok.jumlah_stok <', 5)
-            ->where('stok.jumlah_stok >', 0)
-            ->findAll(5); 
+            ->where('stok.jumlah_stok <', 3) // Menghitung 0, 1, dan 2
+            // ->where('stok.jumlah_stok >', 0) // <-- HAPUS BARIS INI!
+            ->findAll();
 
-        
+        // Hitung jumlah produk yang kritis
+        $jumlahStokKritis = count($stokKritis);
+
+
         // --- KIRIM DATA KE VIEW ---
         $data = [
             'totalProdukAktif' => $totalProdukAktif,
@@ -86,7 +88,7 @@ class DashboardController extends BaseController
             'pesananBaruHariIni' => $pesananBaruHariIni,
             'pesananSiapKirim' => $pesananSiapKirim,
             'pesananHariIni' => $pesananHariIni, // Digunakan untuk tabel
-            'stokRendah' => $stokRendah,         // Digunakan untuk notif
+            'jumlahStokKritis' => $jumlahStokKritis,         // Digunakan untuk notif
         ];
 
         return view('admin/dashboard/index', $data);

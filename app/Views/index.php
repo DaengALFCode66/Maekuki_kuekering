@@ -220,7 +220,7 @@
                 <ul class="benefit-list">
                     <li><i class="fas fa-check-circle"></i> Custom isi kue sesuai request</li>
                     <li><i class="fas fa-check-circle"></i> Free kartu ucapan & pita</li>
-                    <li><i class="fas fa-check-circle"></i> Pengiriman aman ke seluruh kota</li>
+                    <li><i class="fas fa-check-circle"></i> Pengiriman aman ke seluruh kota makassar</li>
                 </ul>
 
                 <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20tertarik%20dengan%20paket%20hampers%20spesial%20Maekuki." class="btn-hubungi-admin">

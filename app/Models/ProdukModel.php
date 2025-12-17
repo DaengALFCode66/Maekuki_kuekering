@@ -25,7 +25,7 @@ class ProdukModel extends Model
     }
     // app/Models/ProdukModel.php (Tambahkan method ini di dalam class ProdukModel)
 
-    public function getProdukBySearch($search = null,$sortOrder = 'normal')
+    public function getProdukBySearch($search = null, $sortOrder = 'normal')
     {
         $builder = $this->builder(); // Membangun query dari model
 
@@ -39,19 +39,25 @@ class ProdukModel extends Model
             ->join('stok', 'stok.id_produk = produk.id', 'left'); // LEFT JOIN agar produk tanpa stok tetap tampil
 
         if ($sortOrder === 'stok_asc') {
-        // Stok terendah ke tertinggi
-        $builder->orderBy('stok.jumlah_stok', 'ASC'); 
-    } elseif ($sortOrder === 'stok_desc') {
-        // Stok tertinggi ke terendah
-        $builder->orderBy('stok.jumlah_stok', 'DESC'); 
-    } else {
-        // Urutan default: Berdasarkan ID Produk Terbaru
-        $builder->orderBy('produk.id', 'DESC');
-    }
+            // Stok terendah ke tertinggi
+            $builder->orderBy('stok.jumlah_stok', 'ASC');
+        } elseif ($sortOrder === 'stok_desc') {
+            // Stok tertinggi ke terendah
+            $builder->orderBy('stok.jumlah_stok', 'DESC');
+        } else {
+            // Urutan default: Berdasarkan ID Produk Terbaru
+            $builder->orderBy('produk.id', 'DESC');
+        }
 
         // Urutkan berdasarkan ID terbaru
         $builder->orderBy('produk.id', 'ASC');
 
-        return $builder->get()->getResultArray(); 
+        return $builder->get()->getResultArray();
+    }
+
+    public function hitungStokKritis()
+    {
+        // Menghitung jumlah produk di mana kolom 'stok' kurang dari 3
+        return $this->where('stok <', 3)->countAllResults();
     }
 }

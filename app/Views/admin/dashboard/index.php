@@ -94,18 +94,35 @@
         </div>
     </div>
 
-    <div class="card-box notification-card">
-        <h3 class="card-title"><i class="fas fa-bell"></i> Notif Penting</h3>
-        <ul class="notification-list">
-            <?php if (empty($stokRendah)): ?>
-                <li class="notif-safe"><i class="fas fa-check-circle text-green"></i> Semua stok dalam batas aman.</li>
+    <div class="notif-penting-wrapper">
+        <div class="notif-penting-header">
+            <i class="fas fa-bell"></i> Notif Penting
+        </div>
+
+        <div class="notif-penting-content">
+
+            <?php if ($jumlahStokKritis > 0): ?>
+                <div class="notif-item notif-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>
+                        <span class="notif-count"><?= $jumlahStokKritis ?></span> produk memiliki stok kritis. Segera restock!
+                    </p>
+                    <a href="<?= base_url('admin/produk') ?>" class="action-link">Lihat Produk &rarr;</a>
+                </div>
             <?php else: ?>
-                <?php foreach ($stokRendah as $stok): ?>
-                    <li class="notif-warning"><i class="fas fa-exclamation-triangle text-red"></i> Stok Rendah: **<?= esc($stok['nama']) ?>** tinggal **<?= esc($stok['jumlah_stok']) ?>** toples.</li>
-                <?php endforeach; ?>
+                <div class="notif-item notif-success">
+                    <i class="fas fa-check-circle"></i>
+                    <p>Semua stok dalam batas aman.</p>
+                </div>
             <?php endif; ?>
-            <li class="notif-info"><i class="fas fa-info-circle text-blue"></i> Ada 5 ulasan baru yang belum dilihat.</li>
-        </ul>
+
+            <div class="notif-item notif-info">
+                <i class="fas fa-info-circle"></i>
+                <p>Ada 5 ulasan baru yang belum dilihat.</p>
+                <a href="#" class="action-link">Lihat Ulasan &rarr;</a>
+            </div>
+
+        </div>
     </div>
 
 </div>

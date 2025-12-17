@@ -2260,3 +2260,104 @@ body {
     flex-shrink: 0; 
 }
 /* ... (Gaya untuk strong, total-harga-amount, status-mini) ... */
+
+/* --- Styling Notif Penting --- */
+
+.notif-penting-wrapper {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.notif-penting-header {
+    background-color: #f7f7f7; /* Latar belakang abu-abu muda */
+    color: #444;
+    padding: 15px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-bottom: 1px solid #eee;
+}
+
+.notif-penting-header i {
+    margin-right: 8px;
+    color: #DAA520; /* Ikon bell dengan warna Emas */
+}
+
+.notif-penting-content {
+    padding: 15px;
+}
+
+.notif-item {
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+/* Warna untuk Notif Bahaya (Danger/Kritis) */
+.notif-danger {
+    background-color: #fceceb; /* Latar belakang Merah Muda Sangat Pucat */
+    border: 1px solid #f5c6cb;
+    color: #721c24; /* Teks Merah Tua */
+}
+
+/* Warna untuk Notif Sukses (Aman) */
+.notif-success {
+    background-color: #e5f6e5; /* Latar belakang Hijau Pucat */
+    border: 1px solid #c3e6cb;
+    color: #155724; /* Teks Hijau Tua */
+}
+
+/* Warna untuk Notif Info/Ulasan */
+.notif-info {
+    background-color: #eaf5ff; /* Latar belakang Biru Pucat */
+    border: 1px solid #b8daff;
+    color: #004085; /* Teks Biru Tua */
+}
+
+.notif-item i {
+    flex-shrink: 0; /* Mencegah ikon menyusut */
+    margin-top: 2px;
+    font-size: 1.1rem;
+}
+
+.notif-danger i {
+    color: #dc3545; /* Ikon Bahaya Merah */
+}
+
+.notif-success i {
+    color: #28a745; /* Ikon Cek Hijau */
+}
+
+.notif-info i {
+    color: #007bff; /* Ikon Info Biru */
+}
+
+.notif-item p {
+    margin: 0;
+    line-height: 1.4;
+    font-size: 0.95rem;
+}
+
+.notif-count {
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-right: 3px;
+}
+
+.action-link {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: #8B4513; /* Warna Primary Anda (Coklat Tua) */
+    margin-top: 2px;
+    align-self: flex-end; /* Posisikan di bawah (jika konten panjang) */
+    margin-left: auto; /* Dorong ke kanan */
+}
+
+.action-link:hover {
+    text-decoration: underline;
+}
