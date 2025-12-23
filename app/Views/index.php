@@ -273,7 +273,7 @@
             &copy; 2025 Maekuki. All Rights Reserved.
         </div>
 
-        
+
     </footer>
 
     <div id="cart-modal" class="modal">
@@ -353,22 +353,59 @@
     <div id="user-data-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn user-data-close-btn">&times;</span>
-            <h2>Masukkan Data Pengiriman</h2>
+            <h2 style="color: var(--color-primary); margin-bottom: 15px;">Konfirmasi Pesanan</h2>
+
+            <div id="order-summary-checkout" style="background: #fdfaf0; border: 1px solid #e9d5a1; padding: 15px; border-radius: 8px; margin-bottom: 20px; max-height: 200px; overflow-y: auto;">
+                <h4 style="margin-top: 0; border-bottom: 1px solid #e9d5a1; padding-bottom: 5px;">Item yang Dipesan:</h4>
+                <ul id="summary-items-list" style="list-style: none; padding: 0; margin: 0;">
+                </ul>
+                <div style="border-top: 1px solid #e9d5a1; margin-top: 10px; padding-top: 5px; font-weight: 700; display: flex; justify-content: space-between;">
+                    <span>Total Bayar:</span>
+                    <span id="summary-total-price" style="color: #E60023;">Rp 0</span>
+                </div>
+
+                <small style="display: block; color: #8B4513; margin-top: 5px; text-align: right;">
+                    *Pembayaran via WhatsApp
+                </small>
+            </div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 10px;">Masukkan Data Pengiriman:</h3>
             <form id="user-data-form">
                 <div class="form-group" style="margin-bottom: 15px;">
                     <label for="user-name">Nama Lengkap:</label>
-                    <input type="text" id="user-name" required style="width: 100%; padding: 8px;">
+                    <input type="text" id="user-name" required style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
                 </div>
                 <div class="form-group" style="margin-bottom: 15px;">
                     <label for="user-phone">Nomor Telepon (WA):</label>
-                    <input type="tel" id="user-phone" required style="width: 100%; padding: 8px;">
+                    <input type="tel" id="user-phone" required style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
                 </div>
                 <div class="form-group" style="margin-bottom: 20px;">
                     <label for="user-address">Alamat Pengiriman:</label>
-                    <textarea id="user-address" required style="width: 100%; padding: 8px;"></textarea>
+                    <textarea id="user-address" required style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;"></textarea>
                 </div>
-                <button type="submit" id="final-checkout-btn" class="btn-order" style="width: 100%; padding: 12px; background: #DAA520;">Finalisasi Pesanan</button>
+                <button type="submit" id="final-checkout-btn" class="btn-order" style="width: 100%; padding: 12px; background: #DAA520;">FINALISASI PESANAN</button>
+
+                <p style="font-size: 0.8rem; color: #666; text-align: center; margin-top: 10px; font-style: italic;">
+                    *Catatan: Pembayaran dan detail pengiriman akan dilakukan melalui WhatsApp Admin.
+                </p>
             </form>
+        </div>
+    </div>
+
+    <div id="user-data-modal" class="modal">
+        <div class="modal-content">
+        </div>
+    </div>
+
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content" style="max-width: 350px; text-align: center; padding: 30px;">
+            <i class="fas fa-question-circle" style="font-size: 4rem; color: #DAA520; margin-bottom: 20px;"></i>
+            <h3 style="margin-bottom: 10px; color: var(--color-primary);">Konfirmasi Pesanan</h3>
+            <p style="color: #666; margin-bottom: 25px; line-height: 1.5;">Apakah data yang Anda masukkan sudah benar? Pesanan akan segera diproses.</p>
+
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button id="cancel-final-btn" class="btn-order" type="button" style="background: #ccc; flex: 1; padding: 10px;">Batal</button>
+                <button id="confirm-final-btn" class="btn-order" type="button" style="background: #DAA520; flex: 1; padding: 10px;">Ya, Kirim!</button>
+            </div>
         </div>
     </div>
 
@@ -499,10 +536,25 @@
             }
         }
 
+        // Tambahkan ini agar JavaScript bisa mengambil token keamanan dari cookie
+        function getCookie(name) {
+            let nameEQ = name + "=";
+            let ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
         // --- Deklarasi Variabel Global (Diberi nilai nanti di DOMContentLoaded) ---
         // Dideklarasikan di sini agar bisa diakses oleh semua fungsi
         let cartCountElement = null;
         let cartModal = null;
+        let confirmModal = null;
+        let cancelFinalBtn = null;
+        let confirmFinalBtn = null;
         let closeBtn = null;
         let cartIconBtn = null;
         let cartWrapper = null;
@@ -639,15 +691,23 @@
             const cart = getCart();
             let total = 0;
 
+            // Menghapus isi lama agar tidak menumpuk
             cartWrapper.innerHTML = '';
 
             if (Object.keys(cart).length === 0) {
-                emptyCartMessage.style.display = 'block';
+                // --- PERBAIKAN: Masukkan kembali elemen pesan kosong ke dalam wrapper ---
+                cartWrapper.innerHTML = `
+            <p id="empty-cart-message" style="text-align: center; color: #888; margin: 50px 0; font-size: 1.1rem;">
+                Keranjang Anda kosong
+                <br><a href="#katalog" style="color: #DAA520; text-decoration: underline;" onclick="closeCartModal()">Mulai Belanja</a>
+            </p>
+        `;
                 checkoutBtn.disabled = true;
+                checkoutBtn.style.opacity = '0.5'; // Visual bahwa tombol mati
                 cartWrapper.style.minHeight = '150px';
             } else {
-                emptyCartMessage.style.display = 'none';
                 checkoutBtn.disabled = false;
+                checkoutBtn.style.opacity = '1';
                 cartWrapper.style.minHeight = 'auto';
 
                 for (const id in cart) {
@@ -655,30 +715,35 @@
                     const subtotal = item.price * item.qty;
                     total += subtotal;
 
-                    // --- KODE HTML CARD PRODUK (SESUAI DESAIN ANDA) ---
                     const productHtml = `
-                    <div class="cart-product-item">
-                        <img src="${base_url('assets/Asset/' + item.image)}" alt="${item.name}">
-                        
-                        <div class="cart-detail">
-                            <h4>${item.name}</h4>
-                            <p>${formatRupiah(item.price)}</p>
-                        </div>
-                        
-                        <div class="cart-actions-column">
-                            <div class="quantity-control">
-                                <button class="qty-minus-btn" data-id="${id}">-</button>
-                                <span class="qty-display">${item.qty}</span>
-                                <button class="qty-plus-btn" data-id="${id}">+</button>
-                            </div>
-                            <button class="delete-btn" data-id="${id}"><i class="fas fa-trash"></i></button>
-                        </div>
+                <div class="cart-product-item">
+                    <img src="${base_url('assets/Asset/' + item.image)}" alt="${item.name}">
+                    <div class="cart-detail">
+                        <h4>${item.name}</h4>
+                        <p>${formatRupiah(item.price)}</p>
                     </div>
-                `;
+                    <div class="cart-actions-column">
+                        <div class="quantity-control">
+                            <button class="qty-minus-btn" data-id="${id}">-</button>
+                            <span class="qty-display">${item.qty}</span>
+                            <button class="qty-plus-btn" data-id="${id}">+</button>
+                        </div>
+                        <button class="delete-btn" data-id="${id}"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
                     cartWrapper.insertAdjacentHTML('beforeend', productHtml);
                 }
             }
             cartTotalAmount.textContent = formatRupiah(total);
+        }
+
+        // Tambahkan fungsi helper untuk menutup modal saat klik "Mulai Belanja"
+        function closeCartModal() {
+            cartModal.classList.remove('show-modal');
+            setTimeout(() => {
+                cartModal.style.display = 'none';
+            }, 300);
         }
 
         function getProductDataFromCard(card) {
@@ -787,6 +852,9 @@
             cartTotalAmount = document.getElementById('cart-total-amount');
             checkoutBtn = document.getElementById('checkout-btn');
             emptyCartMessage = document.getElementById('empty-cart-message');
+            confirmModal = document.getElementById('confirm-modal');
+            cancelFinalBtn = document.getElementById('cancel-final-btn');
+            confirmFinalBtn = document.getElementById('confirm-final-btn');
 
             // Elemen Toast
             toastElement = document.getElementById('toast-notification');
@@ -883,6 +951,26 @@
             userDataForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
 
+                // Tampilkan Modal Konfirmasi
+                confirmModal.style.display = 'block';
+                setTimeout(() => {
+                    confirmModal.classList.add('show-modal');
+                }, 10);
+            });
+
+            // Listener untuk tombol "Batal" di dalam modal konfirmasi
+            cancelFinalBtn.addEventListener('click', function() {
+                confirmModal.classList.remove('show-modal');
+                setTimeout(() => {
+                    confirmModal.style.display = 'none';
+                }, 300);
+            });
+
+            // Listener untuk tombol "Ya, Kirim!" di dalam modal konfirmasi
+            confirmFinalBtn.addEventListener('click', async function() {
+                // 1. Tutup modal konfirmasi dulu
+                confirmModal.classList.remove('show-modal');
+                confirmModal.style.display = 'none';
                 const cart = getCart();
                 const itemsArray = Object.values(cart); // Ambil array item dari cart object
 
@@ -896,16 +984,19 @@
                     user: userData,
                     items: itemsArray
                 };
-
-                // Tampilkan Loading/Disable tombol
-                this.querySelector('#final-checkout-btn').textContent = 'Memproses...';
-                this.querySelector('#final-checkout-btn').disabled = true;
+                // --- PERBAIKAN DI SINI: Gunakan variabel langsung, jangan pakai 'this' ---
+                const realFinalBtn = document.getElementById('final-checkout-btn');
+                realFinalBtn.textContent = 'Memproses...';
+                realFinalBtn.disabled = true;
 
                 try {
                     const response = await fetch(base_url('api/checkout'), {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
+                            // --- TAMBAHKAN BARIS INI UNTUK MENGATASI ERROR GAGAL ---
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': getCookie('csrf_cookie_name') || getCookie('csrf_test_name') // Sesuaikan 'csrf_cookie_name' dengan config/App.php Anda
                             // CI4 memerlukan token CSRF jika diaktifkan. Kita abaikan dulu.
                         },
                         body: JSON.stringify(payload)
@@ -918,63 +1009,57 @@
                         showToast("Pesanan Berhasil!", `Pesanan ID ${result.id_pesanan} berhasil dicatat.`, 'fas fa-check-circle');
 
                         // Bersihkan Local Storage
-            
+
 
                         // Kirim notifikasi WhatsApp
                         // Tambahkan di bagian Global Variables (sekitar baris 630 di script Anda)
                         // Anggap nomor WA Admin adalah: 0812-3456-7890 (sesuai contoh di Footer Anda)
                         // --- KUNCI PERBAIKAN: MEMBUAT PESAN WHATSAPP BARU (Itemized List + Total) ---
 
-                        const ADMIN_PHONE = '6283144310325'; // Pastikan ini adalah nomor Admin yang benar
+                        // --- KUNCI PERBAIKAN: FORMAT PESAN WHATSAPP SESUAI GAMBAR ---
+                        // --- KUNCI PERBAIKAN AKHIR: MENGGUNAKAN UNICODE UNTUK EMOJI AMAN ---
 
-                        // 1. Dapatkan daftar item yang dipesan dan hitung total
+                        const ADMIN_PHONE = '6282393189088';
+
                         const cart = getCart();
                         const itemsArray = Object.values(cart);
                         let pesananList = "";
-                        let grandTotal = 0; // KUNCI: Variabel untuk menyimpan total harga
+                        let grandTotal = 0;
 
-                        // 2. Loop untuk membuat daftar pesanan bernomor dan menghitung total
                         itemsArray.forEach((item, index) => {
                             const subtotal = item.price * item.qty;
-                            grandTotal += subtotal; // Tambahkan ke grand total
-
-                            // Format produk: Nama Produk : Kue Kastengel, Jumlah : 2
-                            pesananList += `${index + 1}. Nama Produk : ${item.name}\n`;
-                            pesananList += `   Jumlah            : ${item.qty}\n\n`;
+                            grandTotal += subtotal;
+                            pesananList += `${index + 1}. ${item.name} (${item.qty} toples) – ${formatRupiah(subtotal).replace('Rp', 'Rp')}\n`;
                         });
 
-                        // 3. Format Total Harga (sama seperti fungsi formatRupiah, tapi kita buat sederhana)
-                        const totalRupiah = formatRupiah(grandTotal).replace('Rp', 'Rp '); // Menggunakan fungsi yang sudah ada
+                        const totalBayarFormatted = formatRupiah(grandTotal).replace('Rp', 'Rp');
 
-                        // 4. Teks Header dan Data Pelanggan
-                        const header =
-                            `📦 *Katalog Kue Kering – Maekuki* 🍪✨
+                        // Definisi Emoji via Unicode (Solusi Tanda Tanya)
+                        const sparkle = "\u2728"; // Emoji ✨
+                        const smile = "\uD83D\uDE0A"; // Emoji 😊
+                        const pray = "\uD83D\uDE4F"; // Emoji 🙏
+                        const cookie = "\uD83C\uDF6A"; // Emoji 🍪
 
-_Halo ${userData.name}!
-Terima kasih sudah berbelanja di UMKM Maekuki ❤️
-Berikut katalog kue kering spesial kami:_
+                        // Susun Pesan Tanpa Mengetik Emoji Langsung
+                        const fullMessage = `${sparkle}Halo *${userData.name}*, terima kasih telah berbelanja di *Maekuki*${sparkle}
+Berikut detail pesanan kue anda ${smile}
 
-📍 *DATA PEMBELI*
-Nama: ${userData.name}
-No. Telepon: ${userData.phone}
-Alamat Pengiriman: ${userData.address}
-`;
-
-                        // 5. Teks Detail Pesanan, Total Harga, dan Footer
-                        const footer = `
-🛍️ *DETAIL PESANAN*
-
+*Detail Pesanan :*
 ${pesananList}
-Total Harga Produk: ${totalRupiah}
+*Total Pembayaran : ${totalBayarFormatted}*
 
-Catatan tambahan: (Silakan isi jika ada)
+*Data Pemesan :*
+Nama     : ${userData.name}
+No.tele.  : ${userData.phone}
+Alamat.  : ${userData.address}
 
-Kami akan segera cek ketersediaan dan menghitung total + ongkir 😊
-`;
+Silakan tetap di chat ini untuk melanjutkan proses *pembayaran dan pengiriman* ${smile}
+Jika ada pertanyaan, perubahan pesanan, atau ingin informasi lainnya, jangan ragu untuk menghubungi kami melalui chat ini ya ${pray}
 
-                        const fullMessage = header + footer;
+Terima kasih telah mempercayai Maekuki ${cookie}
+${sparkle}Kami siap melayani Anda dengan sepenuh hati ${sparkle}`;
 
-                        // 6. Kirim notifikasi WhatsApp
+                        // Kirim dengan encoding URL yang benar
                         const whatsappUrl = `https://wa.me/${ADMIN_PHONE}?text=${encodeURIComponent(fullMessage)}`;
                         window.open(whatsappUrl, '_blank');
 
@@ -988,14 +1073,11 @@ Kami akan segera cek ketersediaan dan menghitung total + ongkir 😊
                     }
 
                 } catch (error) {
-                    showToast("Error Koneksi", "Gagal menghubungi server.", 'fas fa-exclamation-triangle');
-                    console.error('AJAX Error:', error);
+                    showToast("Gagal!", "Terjadi kesalahan sistem atau keamanan. Silakan coba lagi.", 'fas fa-times-circle');
+                    console.error('Penyebab Error:', error);
                 } finally {
-                    // Reset form dan tombol
-                    userDataModal.style.display = 'none';
-                    this.querySelector('#final-checkout-btn').textContent = 'Finalisasi Pesanan';
-                    this.querySelector('#final-checkout-btn').disabled = false;
-                    this.reset();
+                    realFinalBtn.textContent = 'FINALISASI PESANAN';
+                    realFinalBtn.disabled = false;
                 }
             });
 
@@ -1069,6 +1151,30 @@ Kami akan segera cek ketersediaan dan menghitung total + ongkir 😊
                     showToast("Keranjang Kosong", "Tambahkan produk terlebih dahulu.", 'fas fa-exclamation-triangle');
                     return;
                 }
+
+                // --- LOGIKA BARU: MENGISI RINGKASAN KE MODAL CHECKOUT ---
+                const summaryList = document.getElementById('summary-items-list');
+                const summaryTotal = document.getElementById('summary-total-price');
+                let totalHarga = 0;
+
+                summaryList.innerHTML = ''; // Kosongkan list lama
+
+                for (const id in cart) {
+                    const item = cart[id];
+                    const subtotal = item.price * item.qty;
+                    totalHarga += subtotal;
+
+                    const li = document.createElement('li');
+                    li.style.cssText = 'display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem;';
+                    li.innerHTML = `
+            <span>${item.qty}x ${item.name}</span>
+            <span>${formatRupiah(subtotal)}</span>
+        `;
+                    summaryList.appendChild(li);
+                }
+
+                summaryTotal.textContent = formatRupiah(totalHarga);
+                // --------------------------------------------------------
 
                 // 1. Tutup Modal Keranjang (Menggunakan animasi smooth)
                 cartModal.classList.remove('show-modal');

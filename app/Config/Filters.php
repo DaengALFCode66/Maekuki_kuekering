@@ -73,7 +73,11 @@ class Filters extends BaseFilters
     public array $globals = [
         'before' => [
             // 'honeypot',
-            'csrf',
+            'csrf' => [
+                'except' => [
+                    'api/checkout', // Tambahkan baris ini agar API checkout tidak butuh token
+                ]
+            ],
             // 'invalidchars',
         ],
         'after' => [

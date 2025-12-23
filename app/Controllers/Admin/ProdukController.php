@@ -26,20 +26,20 @@ class ProdukController extends BaseController
     // LIST SEMUA PRODUK (URL: /admin/produk)
     public function index()
     {
-    // 1. Ambil query pencarian dan sorting
-    $search = $this->request->getGet('search');
-    $sortOrder = $this->request->getGet('sort') ?? 'normal'; // Tangkap parameter 'sort'
+        // 1. Ambil query pencarian dan sorting
+        $search = $this->request->getGet('search');
+        $sortOrder = $this->request->getGet('sort') ?? 'normal'; // Tangkap parameter 'sort'
 
-    // 2. Panggil Model dengan parameter yang lengkap
-    $produkData = $this->produkModel->getProdukBySearch($search, $sortOrder);
+        // 2. Panggil Model dengan parameter yang lengkap
+        $produkData = $this->produkModel->getProdukBySearch($search, $sortOrder);
 
-    // 3. Kirim data ke view
-    $data = [
-        'produk' => $produkData,
-        'searchQuery' => $search,
-    ];
+        // 3. Kirim data ke view
+        $data = [
+            'produk' => $produkData,
+            'searchQuery' => $search,
+        ];
 
-    return view('admin/produk/index', $data);
+        return view('admin/produk/index', $data);
     }
 
     // BUAT PRODUK BARU (URL: /admin/produk/new)
@@ -56,6 +56,25 @@ class ProdukController extends BaseController
     {
         $fileGambar = $this->request->getFile('gambar');
         $newStok = $this->request->getPost('jumlah_stok');
+
+        // --- LETAKKAN DI SINI (Sebelum Transaksi) ---
+        $rules = [
+            'gambar' => [
+                'label' => 'Gambar Produk',
+                'rules' => [
+                    'uploaded[gambar]',
+                    'is_image[gambar]',
+                    'mime_in[gambar,image/jpg,image/jpeg,image/png]',
+                    'max_size[gambar,2048]',
+                ],
+            ],
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', $this->validator->getError('gambar'));
+        }
+        // ---------------------------------------------
+
         $currentDateTime = date('Y-m-d H:i:s');
         $db = $this->produkModel->db;
         $db->transBegin(); // Mulai Transaksi
@@ -137,6 +156,25 @@ class ProdukController extends BaseController
         $fileGambar = $this->request->getFile('new_gambar');
         $gambarLama = $this->request->getPost('gambar_lama');
 
+        // --- LOGIKA VALIDASI UNTUK UPDATE ---
+        if ($fileGambar && $fileGambar->isValid()) {
+            $rules = [
+                'new_gambar' => [
+                    'label' => 'Gambar Baru',
+                    'rules' => [
+                        'is_image[new_gambar]',
+                        'mime_in[new_gambar,image/jpg,image/jpeg,image/png]',
+                        'max_size[new_gambar,2048]',
+                    ],
+                ],
+            ];
+
+            if (!$this->validate($rules)) {
+                return redirect()->back()->withInput()->with('error', $this->validator->getError('new_gambar'));
+            }
+        }
+        // ------------------------------------
+
         $data_update = [
             'nama'       => $this->request->getPost('nama'),
             'deskripsi'  => $this->request->getPost('deskripsi'),
@@ -199,23 +237,22 @@ class ProdukController extends BaseController
         return redirect()->to('/admin/produk')->with('success', 'Produk berhasil diupdate dan foto telah diganti.');
     }
     public function delete($id = null)
-{
-    try {
-        $this->produkModel->delete($id);
-        return redirect()->to('/admin/produk')->with('success', 'produk#' . $id . ' berhasil dihapus.');
-    } catch (\Exception $e) {
-        // FK constraint mungkin gagal (misal jika ada entri di tabel lain yang merujuk)
-        return redirect()->back()->with('error', 'Gagal menghapus pesanan. Error: ' . $e->getMessage());
+    {
+        try {
+            $this->produkModel->delete($id);
+            return redirect()->to('/admin/produk')->with('success', 'produk#' . $id . ' berhasil dihapus.');
+        } catch (\Exception $e) {
+            // FK constraint mungkin gagal (misal jika ada entri di tabel lain yang merujuk)
+            return redirect()->back()->with('error', 'Gagal menghapus pesanan. Error: ' . $e->getMessage());
+        }
+    }
+    public function updateStatus($id)
+    {
+        $status = $this->request->getPost('status');
+
+        $model = new ProdukModel();
+        $model->update($id, ['status' => $status]);
+
+        return redirect()->back()->with('message', 'Status berhasil diperbarui');
     }
 }
-    public function updateStatus($id)
-{
-    $status = $this->request->getPost('status');
-
-    $model = new ProdukModel();
-    $model->update($id, ['status' => $status]);
-
-    return redirect()->back()->with('message', 'Status berhasil diperbarui');
-}
-}   
-    

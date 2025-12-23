@@ -75,10 +75,6 @@
                 </div>
             <?php endif; ?>
 
-            <?php if (session()->getFlashdata('error')): ?>
-                <div class="alert error"><?= session()->getFlashdata('error') ?></div>
-            <?php endif; ?>
-
             <section class="content-body">
                 <?= $this->renderSection('content') ?>
             </section>

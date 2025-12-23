@@ -28,6 +28,8 @@ class DashboardController extends BaseController
     public function index()
     {
         // Inisialisasi Batasan Waktu
+        date_default_timezone_set('Asia/Makassar');
+        
         $startOfDay = date('Y-m-d 00:00:00');
         $endOfDay = date('Y-m-d 23:59:59');
         $startOfMonth = date('Y-m-01 00:00:00');

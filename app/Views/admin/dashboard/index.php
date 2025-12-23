@@ -116,11 +116,7 @@
                 </div>
             <?php endif; ?>
 
-            <div class="notif-item notif-info">
-                <i class="fas fa-info-circle"></i>
-                <p>Ada 5 ulasan baru yang belum dilihat.</p>
-                <a href="#" class="action-link">Lihat Ulasan &rarr;</a>
-            </div>
+           
 
         </div>
     </div>
